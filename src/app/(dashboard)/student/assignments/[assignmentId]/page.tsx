@@ -4,14 +4,16 @@ import { useState } from "react";
 import { ArrowLeft, Clock, FileText, UploadCloud, AlertCircle, File, CheckCircle2, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { use } from "react";
 
-export default function AssignmentDetailPage({ params }: { params: { assignmentId: string } }) {
+export default function AssignmentDetailPage({ params }: { params: Promise<{ assignmentId: string }> }) {
+  const resolvedParams = use(params);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [textSubmission, setTextSubmission] = useState("");
 
   const assignment = {
-    id: params.assignmentId,
+    id: resolvedParams.assignmentId,
     title: "Algebraic Fractions Practice",
     course: "IGCSE Mathematics",
     dueDate: "Today, 11:59 PM",

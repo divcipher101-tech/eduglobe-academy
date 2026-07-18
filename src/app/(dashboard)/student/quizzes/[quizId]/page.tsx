@@ -32,7 +32,10 @@ const mockQuiz = {
   ]
 };
 
-export default function QuizTakingInterface({ params }: { params: { quizId: string } }) {
+import { use } from "react";
+
+export default function QuizTakingInterface({ params }: { params: Promise<{ quizId: string }> }) {
+  const resolvedParams = use(params);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [timeLeft, setTimeLeft] = useState(mockQuiz.timeLimit);
@@ -88,7 +91,7 @@ export default function QuizTakingInterface({ params }: { params: { quizId: stri
       // Import the server action dynamically to avoid build issues in client components if needed,
       // but in Next 14 we can just import it at the top. Let's assume we import it.
       const { submitQuizAttempt } = await import("@/app/actions/quiz");
-      await submitQuizAttempt(params.quizId, finalScore, mockQuiz.timeLimit - timeLeft);
+      await submitQuizAttempt(resolvedParams.quizId, finalScore, mockQuiz.timeLimit - timeLeft);
     } catch (e) {
       console.error(e);
     } finally {

@@ -9,7 +9,7 @@ const upcomingClasses = [
     id: "cls-101",
     title: "Advanced Algebraic Functions",
     course: "IGCSE Mathematics",
-    tutor: "Dr. Sarah Jenkins",
+    tutor: "Mrs Adeyinka",
     date: "Today",
     time: "14:00 - 15:30",
     status: "LIVE_SOON", // or "LIVE"
@@ -78,7 +78,7 @@ export default function LiveClassesDashboard() {
                 <div className="w-6 h-6 rounded-full bg-primary-700 flex items-center justify-center text-xs font-bold border border-primary-600">
                   SJ
                 </div>
-                <span className="font-medium">Dr. Sarah Jenkins</span>
+                <span className="font-medium">Mrs Adeyinka</span>
               </div>
             </div>
           </div>

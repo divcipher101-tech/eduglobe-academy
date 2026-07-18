@@ -15,7 +15,9 @@ import {
   Building,
   BarChart,
   BrainCircuit,
-  LogOut
+  LogOut,
+  ChevronRight,
+  Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Role } from "@/lib/permissions";
@@ -85,16 +87,23 @@ export default function Sidebar({ role }: { role: Role }) {
   const links = getRoleLinks(role);
 
   return (
-    <aside className="w-[280px] h-screen sticky top-0 bg-white border-r border-glass-border flex-col hidden md:flex z-50">
-      <div className="h-[72px] flex items-center px-6 border-b border-glass-border shrink-0">
-        <Link href="/" className="font-display font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-500">
-          EduGlobe
+    <aside className="w-[280px] h-screen sticky top-0 bg-white/80 backdrop-blur-xl border-r border-glass-border flex-col hidden md:flex z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+      {/* Brand Header */}
+      <div className="h-[80px] flex items-center px-8 border-b border-glass-border/50 shrink-0 bg-white/50">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-md shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all">
+            <Sparkles className="w-4 h-4 text-white" />
+          </div>
+          <span className="font-display font-bold text-xl tracking-tight text-text-primary">
+            EduGlobe<span className="text-primary-600">.</span>
+          </span>
         </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-        <div className="text-xs font-bold text-text-tertiary uppercase tracking-wider mb-4 px-3">
-          Menu
+      {/* Navigation Links */}
+      <nav className="flex-1 overflow-y-auto py-8 px-5 space-y-1.5 custom-scrollbar">
+        <div className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.2em] mb-4 px-3">
+          Main Menu
         </div>
         
         {links.map((link) => {
@@ -104,35 +113,46 @@ export default function Sidebar({ role }: { role: Role }) {
               key={link.href}
               href={link.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all group",
+                "flex items-center justify-between px-4 py-3 rounded-xl text-[14px] font-bold transition-all group relative overflow-hidden",
                 isActive 
-                  ? "bg-primary-50 text-primary-700" 
-                  : "text-text-secondary hover:bg-bg-tertiary hover:text-text-primary"
+                  ? "text-primary-700 bg-primary-50 shadow-sm border border-primary-100" 
+                  : "text-text-secondary hover:bg-bg-tertiary hover:text-text-primary border border-transparent"
               )}
             >
-              <link.icon className={cn(
-                "w-5 h-5 transition-colors",
-                isActive ? "text-primary-600" : "text-text-tertiary group-hover:text-primary-500"
-              )} />
-              {link.title}
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary-500 rounded-r-full"></div>
+              )}
+              
+              <div className="flex items-center gap-3">
+                <link.icon className={cn(
+                  "w-5 h-5 transition-transform duration-300",
+                  isActive ? "text-primary-600 scale-110" : "text-text-tertiary group-hover:text-primary-500 group-hover:scale-110"
+                )} />
+                <span className="relative top-[1px]">{link.title}</span>
+              </div>
+              
+              {!isActive && (
+                <ChevronRight className="w-4 h-4 text-text-tertiary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-glass-border">
+      {/* Footer / Settings */}
+      <div className="p-5 border-t border-glass-border/50 bg-bg-secondary/30">
         <Link 
           href={`/${role.toLowerCase()}/settings`}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-text-secondary hover:bg-bg-tertiary hover:text-text-primary transition-all group"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-text-secondary hover:bg-white hover:shadow-sm border border-transparent hover:border-glass-border transition-all group"
         >
-          <Settings className="w-5 h-5 text-text-tertiary group-hover:text-primary-500 transition-colors" />
+          <Settings className="w-5 h-5 text-text-tertiary group-hover:text-text-primary group-hover:rotate-90 transition-all duration-500" />
           Settings
         </Link>
         <button 
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-danger-600 hover:bg-danger-50 transition-all mt-1"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-danger-600 hover:bg-danger-50 border border-transparent transition-all mt-2 group"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Sign out
         </button>
       </div>

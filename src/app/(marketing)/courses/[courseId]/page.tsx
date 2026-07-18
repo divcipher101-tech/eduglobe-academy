@@ -5,11 +5,12 @@ import Link from "next/link";
 import { enrollInCourse } from "@/app/actions/enroll";
 import { auth } from "@/lib/auth";
 
-export default async function CourseDetails({ params }: { params: { courseId: string } }) {
+export default async function CourseDetails({ params }: { params: Promise<{ courseId: string }> }) {
+  const resolvedParams = await params;
   const session = await auth();
 
   const course = await prisma.course.findUnique({
-    where: { id: params.courseId },
+    where: { id: resolvedParams.courseId },
     include: {
       tutor: true,
       subject: true

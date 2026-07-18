@@ -10,14 +10,17 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-export default function VirtualClassroom({ params }: { params: { classId: string } }) {
+import { use } from "react";
+
+export default function VirtualClassroom({ params }: { params: Promise<{ classId: string }> }) {
+  const resolvedParams = use(params);
   const [isMuted, setIsMuted] = useState(true);
   const [isVideoOff, setIsVideoOff] = useState(false);
   const [activeTab, setActiveTab] = useState<"chat" | "participants">("chat");
   const [chatMessage, setChatMessage] = useState("");
 
   const mockParticipants = [
-    { id: 1, name: "Dr. Sarah Jenkins", role: "Tutor", initials: "SJ", isSpeaking: true },
+    { id: 1, name: "Mrs Adeyinka", role: "Tutor", initials: "SJ", isSpeaking: true },
     { id: 2, name: "You", role: "Student", initials: "Me", isSpeaking: false },
     { id: 3, name: "Alex Chen", role: "Student", initials: "AC", isSpeaking: false },
     { id: 4, name: "Maria Garcia", role: "Student", initials: "MG", isSpeaking: false },
@@ -25,7 +28,7 @@ export default function VirtualClassroom({ params }: { params: { classId: string
   ];
 
   const mockMessages = [
-    { id: 1, sender: "Dr. Sarah Jenkins", time: "14:05", text: "Welcome everyone! We'll start in 2 minutes." },
+    { id: 1, sender: "Mrs Adeyinka", time: "14:05", text: "Welcome everyone! We'll start in 2 minutes." },
     { id: 2, sender: "Alex Chen", time: "14:06", text: "Hello Dr. Jenkins!" },
     { id: 3, sender: "Maria Garcia", time: "14:06", text: "Hi, can you hear me?" },
   ];
@@ -67,7 +70,7 @@ export default function VirtualClassroom({ params }: { params: { classId: string
                 <div className="w-4 h-4 rounded-full bg-primary-500 flex items-center justify-center">
                   <Mic className="w-2.5 h-2.5 text-white" />
                 </div>
-                Dr. Sarah Jenkins
+                Mrs Adeyinka
               </div>
             </div>
           </div>

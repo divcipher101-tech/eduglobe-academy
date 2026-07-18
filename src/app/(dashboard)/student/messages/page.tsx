@@ -30,7 +30,7 @@ const CURRENT_USER_ID = "u1";
 const mockConversations: Conversation[] = [
   {
     id: "c1",
-    name: "Dr. Sarah Jenkins",
+    name: "Mrs Adeyinka",
     avatar: "S",
     type: "direct",
     online: true,

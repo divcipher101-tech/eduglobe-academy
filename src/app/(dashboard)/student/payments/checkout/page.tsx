@@ -191,7 +191,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-bold text-text-primary">1-on-1 Tutoring Session</h3>
-                  <p className="text-sm text-text-secondary">Physics • Dr. Sarah Jenkins</p>
+                  <p className="text-sm text-text-secondary">Physics • Mrs Adeyinka</p>
                 </div>
                 <span className="font-bold text-text-primary">₦45,000</span>
               </div>

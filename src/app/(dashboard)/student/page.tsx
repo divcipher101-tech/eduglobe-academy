@@ -158,7 +158,7 @@ export default async function StudentDashboard() {
                   <Clock className="w-4 h-4" /> 10:00 AM - 11:30 AM
                 </div>
                 <h3 className="font-bold text-text-primary">Advanced Calculus Live Session</h3>
-                <p className="text-sm text-text-secondary mt-1 font-medium">with Dr. Sarah Jenkins</p>
+                <p className="text-sm text-text-secondary mt-1 font-medium">with Mrs Adeyinka</p>
                 <Link href="/student/classes/cls-101" className="block w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-center rounded-xl mt-4 transition-colors">
                   Join Virtual Classroom
                 </Link>
