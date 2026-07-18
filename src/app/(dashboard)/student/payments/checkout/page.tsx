@@ -35,7 +35,7 @@ export default function CheckoutPage() {
           <div className="bg-bg-secondary p-6 rounded-2xl border border-glass-border mb-10 text-left max-w-sm mx-auto">
             <div className="flex justify-between items-center mb-2 text-sm">
               <span className="text-text-secondary">Amount Paid</span>
-              <span className="font-bold text-text-primary">$45.00</span>
+              <span className="font-bold text-text-primary">₦45,000</span>
             </div>
             <div className="flex justify-between items-center mb-2 text-sm">
               <span className="text-text-secondary">Transaction ID</span>
@@ -105,7 +105,7 @@ export default function CheckoutPage() {
                     : "border-glass-border bg-white text-text-secondary hover:bg-bg-secondary"
                 )}
               >
-                <div className="w-6 h-6 font-serif italic text-lg leading-none font-black text-green-600">$</div>
+                <div className="w-6 h-6 font-serif italic text-lg leading-none font-black text-green-600">₦</div>
                 <span className="text-sm">Transfer</span>
               </button>
             </div>
@@ -153,7 +153,7 @@ export default function CheckoutPage() {
                   ) : (
                     <>
                       <Lock className="w-4 h-4" />
-                      Pay $45.00
+                      Pay ₦45,000
                     </>
                   )}
                 </button>
@@ -173,7 +173,7 @@ export default function CheckoutPage() {
               <div className="text-center py-10 animate-fade-in-up border-2 border-dashed border-glass-border rounded-2xl bg-bg-secondary">
                 <p className="text-text-secondary font-medium mb-2">Virtual Account Generated</p>
                 <h3 className="text-2xl font-bold text-text-primary font-mono mb-6 tracking-wider">0123 4567 89</h3>
-                <p className="text-sm text-text-tertiary mb-6">Transfer exactly <strong>$45.00</strong> to the account number above.<br/>Your payment will be automatically verified.</p>
+                <p className="text-sm text-text-tertiary mb-6">Transfer exactly <strong>₦45,000</strong> to the account number above.<br/>Your payment will be automatically verified.</p>
                 <button onClick={handlePayment} className="px-8 py-3 bg-white border border-glass-border hover:bg-bg-tertiary text-text-primary rounded-xl font-bold transition-all shadow-sm w-full max-w-sm mx-auto">
                   I have made the transfer
                 </button>
@@ -193,26 +193,26 @@ export default function CheckoutPage() {
                   <h3 className="font-bold text-text-primary">1-on-1 Tutoring Session</h3>
                   <p className="text-sm text-text-secondary">Physics • Dr. Sarah Jenkins</p>
                 </div>
-                <span className="font-bold text-text-primary">$45.00</span>
+                <span className="font-bold text-text-primary">₦45,000</span>
               </div>
             </div>
             
             <div className="h-px bg-glass-border w-full mb-6"></div>
             
             <div className="space-y-3 mb-6">
-              <div className="flex justify-between text-sm">
-                <span className="text-text-secondary">Subtotal</span>
-                <span className="font-medium">$45.00</span>
+              <div className="flex justify-between text-sm text-text-secondary">
+                <span>Subtotal</span>
+                <span className="font-medium">₦45,000</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-text-secondary">Tax (0%)</span>
-                <span className="font-medium">$0.00</span>
+              <div className="flex justify-between text-sm text-text-secondary">
+                <span>Taxes & Fees</span>
+                <span className="font-medium">₦0.00</span>
               </div>
             </div>
             
-            <div className="flex justify-between items-center mb-6 pt-4 border-t border-glass-border">
-              <span className="font-bold text-text-primary">Total</span>
-              <span className="text-3xl font-bold text-primary-600">$45.00</span>
+            <div className="pt-4 border-t border-glass-border flex justify-between items-center mb-6">
+              <span className="font-bold text-text-primary">Total Amount</span>
+              <span className="text-3xl font-bold text-primary-600">₦45,000</span>
             </div>
             
             <div className="flex items-center gap-2 text-xs font-medium text-text-tertiary justify-center">
