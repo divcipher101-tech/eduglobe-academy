@@ -35,7 +35,7 @@ export const authConfig = {
       if (isAuthRoute) {
         if (isLoggedIn) {
           // Default redirect after login - ideally based on role, handled in the login component
-          return Response.redirect(new URL("/", nextUrl)); 
+          return Response.redirect(new URL("/dashboard", nextUrl)); 
         }
         return true;
       }

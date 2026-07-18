@@ -32,7 +32,7 @@ function LoginForm() {
         setError("Invalid email or password");
         setIsLoading(false);
       } else {
-        router.push("/"); // Will be handled by middleware to redirect to correct dashboard
+        router.push("/dashboard"); 
         router.refresh();
       }
     } catch (err) {
