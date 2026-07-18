@@ -104,7 +104,7 @@ export default async function QuizzesDashboard() {
                     In Progress
                   </span>
                   <div className="flex items-center gap-3 text-sm font-medium text-text-secondary">
-                    <span className="flex items-center gap-1"><HelpCircle className="w-4 h-4"/> {attempt.quiz.timeLimitMinutes || '--'} mins</span>
+                    <span className="flex items-center gap-1"><HelpCircle className="w-4 h-4"/> {attempt.quiz.timeLimitMin || '--'} mins</span>
                   </div>
                 </div>
                 <h3 className="text-lg font-bold text-text-primary mb-1 group-hover:text-primary-600 transition-colors">
