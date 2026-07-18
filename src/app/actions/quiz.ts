@@ -17,8 +17,8 @@ export async function submitQuizAttempt(quizId: string, score: number, timeSpent
       quizId,
       studentId: session.user.id,
       score,
-      timeSpentSec,
-      status: "GRADED",
+      timeTakenSec: timeSpentSec,
+      passed: score >= 60, // Assuming 60% is passing
       startedAt: new Date(Date.now() - timeSpentSec * 1000),
       completedAt: new Date(),
     }

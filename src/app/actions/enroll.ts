@@ -38,8 +38,10 @@ export async function enrollInCourse(courseId: string) {
     if (course && course.price && Number(course.price) > 0) {
       await prisma.invoice.create({
         data: {
+          invoiceNumber: `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
           userId: session.user.id,
           amount: course.price,
+          totalAmount: course.price,
           currency: course.currency,
           status: "PAID",
           dueDate: new Date(),
