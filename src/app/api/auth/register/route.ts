@@ -10,6 +10,8 @@ const registerSchema = z.object({
   firstName: z.string().min(2, "First name is required"),
   lastName: z.string().min(2, "Last name is required"),
   role: z.enum(["STUDENT", "TUTOR", "PARENT"]),
+  secretCode: z.string().optional(),
+  specializations: z.array(z.string()).optional(),
 });
 
 export async function POST(req: Request) {
@@ -24,7 +26,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, password, firstName, lastName, role } = validatedData.data;
+    const { email, password, firstName, lastName, role, secretCode, specializations } = validatedData.data;
+
+    // Secret Code Authorization Check
+    if (role === "TUTOR") {
+      const validSecret = process.env.TUTOR_SECRET_CODE || "EDUGLOBE-TUTOR-2026";
+      if (secretCode !== validSecret) {
+        return NextResponse.json(
+          { message: "Invalid authorization code for Tutor registration." },
+          { status: 403 }
+        );
+      }
+    }
+
+    if (role === "PARENT") {
+      const validSecret = process.env.PARENT_SECRET_CODE || "EDUGLOBE-PARENT-2026";
+      if (secretCode !== validSecret) {
+        return NextResponse.json(
+          { message: "Invalid authorization phrase for Parent registration." },
+          { status: 403 }
+        );
+      }
+    }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -85,6 +108,7 @@ export async function POST(req: Request) {
         await tx.tutorProfile.create({
           data: {
             userId: user.id,
+            specializations: specializations || [],
           },
         });
       }

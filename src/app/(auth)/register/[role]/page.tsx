@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, BookOpen, Users, ArrowLeft, Loader2, AlertCircle, Eye, EyeOff, GraduationCap } from "lucide-react";
+import { User, BookOpen, Users, ArrowLeft, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, KeyRound, BookMarked, Check, X } from "lucide-react";
 
 type RoleColor = "primary" | "secondary" | "accent";
 
@@ -36,6 +36,7 @@ const THEME_CLASSES = {
     btn: "bg-primary-600 hover:bg-primary-500 shadow-primary-500/20",
     link: "text-primary-600 hover:text-primary-700",
     gradientText: "text-primary-300",
+    badge: "bg-primary-50 text-primary-700 border-primary-200",
   },
   secondary: {
     iconBg: "bg-secondary-50 text-secondary-600 border-secondary-100",
@@ -44,6 +45,7 @@ const THEME_CLASSES = {
     btn: "bg-secondary-600 hover:bg-secondary-500 shadow-secondary-500/20",
     link: "text-secondary-600 hover:text-secondary-700",
     gradientText: "text-secondary-300",
+    badge: "bg-secondary-50 text-secondary-700 border-secondary-200",
   },
   accent: {
     iconBg: "bg-accent-50 text-accent-600 border-accent-100",
@@ -52,6 +54,7 @@ const THEME_CLASSES = {
     btn: "bg-accent-600 hover:bg-accent-500 shadow-accent-500/20",
     link: "text-accent-600 hover:text-accent-700",
     gradientText: "text-accent-300",
+    badge: "bg-accent-50 text-accent-700 border-accent-200",
   }
 };
 
@@ -64,23 +67,9 @@ export default function RoleRegistrationForm({
   const unwrappedParams = use(params);
   const roleKey = unwrappedParams.role.toLowerCase() as keyof typeof ROLE_INFO;
   const info = ROLE_INFO[roleKey];
-
-  if (!info) {
-    return (
-      <div className="min-h-screen bg-bg-primary flex items-center justify-center p-6">
-        <div className="text-center p-8 bg-white rounded-3xl shadow-xl max-w-md w-full border border-glass-border">
-          <AlertCircle className="w-16 h-16 text-danger-500 mx-auto mb-6" />
-          <h2 className="text-2xl font-display font-bold text-text-primary mb-2">Invalid Role</h2>
-          <p className="text-text-secondary mb-8">The role you selected does not exist or is unavailable.</p>
-          <Link href="/register" className="w-full py-4 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-500 text-white shadow-lg transition-all flex items-center justify-center">
-            Return to Role Selection
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const theme = THEME_CLASSES[info.color];
+  const isTutor = roleKey === 'tutor';
+  const isParent = roleKey === 'parent';
+  const requiresSecret = isTutor || isParent;
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -88,15 +77,40 @@ export default function RoleRegistrationForm({
     email: "",
     password: "",
     confirmPassword: "",
+    secretCode: "",
   });
+  
+  const [specializations, setSpecializations] = useState<string[]>([]);
+  const [availableSubjects, setAvailableSubjects] = useState<{id: string, name: string}[]>([]);
+  const [isSubjectsDropdownOpen, setIsSubjectsDropdownOpen] = useState(false);
   
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Fetch subjects if it's a tutor
+  useEffect(() => {
+    if (isTutor) {
+      fetch('/api/subjects')
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setAvailableSubjects(data);
+        })
+        .catch(err => console.error("Failed to load subjects", err));
+    }
+  }, [isTutor]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const toggleSpecialization = (subjectName: string) => {
+    setSpecializations(prev => 
+      prev.includes(subjectName) 
+        ? prev.filter(s => s !== subjectName)
+        : [...prev, subjectName]
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -105,6 +119,16 @@ export default function RoleRegistrationForm({
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+
+    if (requiresSecret && !formData.secretCode) {
+      setError("Authorization code is required for this role");
+      return;
+    }
+
+    if (isTutor && specializations.length === 0) {
+      setError("Please select at least one subject you wish to teach");
       return;
     }
 
@@ -122,6 +146,8 @@ export default function RoleRegistrationForm({
           email: formData.email,
           password: formData.password,
           role: unwrappedParams.role.toUpperCase(),
+          secretCode: requiresSecret ? formData.secretCode : undefined,
+          specializations: isTutor ? specializations : undefined,
         }),
       });
       
@@ -141,6 +167,22 @@ export default function RoleRegistrationForm({
     }
   };
 
+  if (!info) {
+    return (
+      <div className="min-h-screen bg-bg-primary flex items-center justify-center p-6">
+        <div className="text-center p-8 bg-white rounded-3xl shadow-xl max-w-md w-full border border-glass-border">
+          <AlertCircle className="w-16 h-16 text-danger-500 mx-auto mb-6" />
+          <h2 className="text-2xl font-display font-bold text-text-primary mb-2">Invalid Role</h2>
+          <p className="text-text-secondary mb-8">The role you selected does not exist or is unavailable.</p>
+          <Link href="/register" className="w-full py-4 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-500 text-white shadow-lg transition-all flex items-center justify-center">
+            Return to Role Selection
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const theme = THEME_CLASSES[info.color];
   const Icon = info.icon;
 
   return (
@@ -204,6 +246,32 @@ export default function RoleRegistrationForm({
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {requiresSecret && (
+              <div className="space-y-2 pb-2">
+                <label className="text-sm font-bold text-text-secondary ml-1" htmlFor="secretCode">
+                  {isTutor ? "Tutor Authorization Code" : "Parent Authorization Phrase"} <span className="text-danger-500">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <KeyRound className="w-5 h-5 text-text-tertiary" />
+                  </div>
+                  <input
+                    id="secretCode"
+                    name="secretCode"
+                    type="password"
+                    value={formData.secretCode}
+                    onChange={handleChange}
+                    className={`w-full pl-11 pr-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
+                    placeholder="Enter your secret code..."
+                    required
+                  />
+                </div>
+                <p className="text-xs text-text-tertiary ml-1 mt-1">
+                  This code is provided by EduGlobe administration to authorize your {roleKey} account.
+                </p>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-text-secondary ml-1" htmlFor="firstName">First Name</label>
@@ -289,6 +357,68 @@ export default function RoleRegistrationForm({
               </div>
             </div>
 
+            {isTutor && (
+              <div className="space-y-2 relative">
+                <label className="text-sm font-bold text-text-secondary ml-1 flex items-center gap-2">
+                  <BookMarked className="w-4 h-4" /> Subjects You Teach <span className="text-danger-500">*</span>
+                </label>
+                
+                {/* Custom Multi-Select Dropdown */}
+                <div className="relative">
+                  <div 
+                    onClick={() => setIsSubjectsDropdownOpen(!isSubjectsDropdownOpen)}
+                    className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl cursor-pointer flex flex-wrap gap-2 min-h-[58px] transition-all ${isSubjectsDropdownOpen ? 'ring-4 ring-accent-500/10 border-accent-500' : ''}`}
+                  >
+                    {specializations.length === 0 && (
+                      <span className="text-text-tertiary font-medium">Select subjects...</span>
+                    )}
+                    {specializations.map(spec => (
+                      <span key={spec} className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border ${theme.badge}`}>
+                        {spec}
+                        <div 
+                          className="hover:bg-black/10 rounded-full p-0.5"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSpecialization(spec);
+                          }}
+                        >
+                          <X className="w-3 h-3" />
+                        </div>
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Dropdown Menu */}
+                  {isSubjectsDropdownOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-glass-border rounded-2xl shadow-xl max-h-60 overflow-y-auto py-2 custom-scrollbar">
+                      {availableSubjects.length === 0 ? (
+                        <div className="p-4 text-center text-sm text-text-tertiary">
+                          <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
+                          Loading subjects...
+                        </div>
+                      ) : (
+                        availableSubjects.map((subject) => {
+                          const isSelected = specializations.includes(subject.name);
+                          return (
+                            <div 
+                              key={subject.id}
+                              onClick={() => toggleSpecialization(subject.name)}
+                              className="px-4 py-3 hover:bg-bg-secondary cursor-pointer flex items-center justify-between transition-colors group"
+                            >
+                              <span className={`text-sm font-medium ${isSelected ? 'text-accent-600' : 'text-text-primary group-hover:text-accent-600'}`}>
+                                {subject.name}
+                              </span>
+                              {isSelected && <Check className="w-4 h-4 text-accent-500" />}
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             <button 
               type="submit" 
               className={`w-full py-4 rounded-2xl text-lg font-bold mt-8 shadow-xl flex items-center justify-center gap-2 hover:-translate-y-1 transition-all text-white ${theme.btn}`}
@@ -319,6 +449,14 @@ export default function RoleRegistrationForm({
           </div>
         </div>
       </div>
+      
+      {/* Click outside to close dropdown (invisible overlay) */}
+      {isSubjectsDropdownOpen && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setIsSubjectsDropdownOpen(false)}
+        />
+      )}
     </div>
   );
 }
