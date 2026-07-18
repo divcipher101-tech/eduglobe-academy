@@ -45,9 +45,9 @@ export default async function MyCoursesPage() {
           <p className="text-text-secondary mb-8 max-w-md">
             You are not currently enrolled in any courses. Explore our catalog to find your next subject!
           </p>
-          <button className="btn btn-primary" disabled>
-            Course Catalog (Coming Soon)
-          </button>
+          <Link href="/courses" className="btn btn-primary">
+            Browse Course Catalog
+          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

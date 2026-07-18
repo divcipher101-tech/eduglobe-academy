@@ -110,7 +110,7 @@ export default async function StudentDashboard() {
               <p className="text-text-secondary mb-6 max-w-md">
                 You haven't been enrolled in any courses yet. Once you are enrolled, your syllabus and progress will appear here.
               </p>
-              <Link href="/student/courses" className="btn btn-primary">
+              <Link href="/courses" className="btn btn-primary">
                 Browse Course Catalog
               </Link>
             </div>
