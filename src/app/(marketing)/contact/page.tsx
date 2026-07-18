@@ -67,8 +67,8 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="font-bold text-text-primary text-lg mb-1">Call Us</h4>
-                <p className="text-text-secondary text-sm mb-3">Available Mon-Fri, 9am-6pm (UTC).</p>
-                <a href="tel:+442012345678" className="font-medium text-primary-600 hover:text-primary-700">+44 20 1234 5678</a>
+                <p className="text-text-secondary text-sm mb-3">Available Mon-Fri, 9am-6pm (WAT).</p>
+                <a href="tel:+2347052085561" className="font-medium text-primary-600 hover:text-primary-700">+234 705 208 5561</a>
               </div>
             </div>
 
@@ -79,9 +79,9 @@ export default function ContactPage() {
               <div>
                 <h4 className="font-bold text-text-primary text-lg mb-1">Headquarters</h4>
                 <p className="text-text-secondary text-sm leading-relaxed">
-                  124 Education Avenue<br/>
-                  Innovation District<br/>
-                  London, UK E1 6AN
+                  EduGlobe Academy Campus<br/>
+                  Poka Road, Epe<br/>
+                  Lagos, Nigeria
                 </p>
               </div>
             </div>

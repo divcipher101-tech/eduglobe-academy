@@ -110,15 +110,12 @@ export default async function CourseDetails({ params }: { params: { courseId: st
               </div>
 
               {isEnrolled ? (
-                <Link href="/student/courses" className="w-full btn btn-primary flex justify-center mb-4">
-                  Go to Course
+                <Link href="/student/courses" className="w-full btn btn-primary flex justify-center items-center py-4 rounded-2xl shadow-xl shadow-primary-500/20 mb-4 font-bold text-lg hover:-translate-y-1 transition-all">
+                  Go to Course Dashboard
                 </Link>
               ) : (
-                <form action={async () => {
-                  "use server";
-                  await enrollInCourse(course.id);
-                }}>
-                  <button type="submit" className="w-full btn btn-primary flex justify-center mb-4 text-lg">
+                <form action={enrollInCourse.bind(null, course.id)}>
+                  <button type="submit" className="w-full btn btn-primary flex justify-center items-center py-4 rounded-2xl shadow-xl shadow-primary-500/20 mb-4 font-bold text-lg hover:-translate-y-1 transition-all">
                     Enroll Now
                   </button>
                 </form>
