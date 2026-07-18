@@ -71,15 +71,30 @@ export default function QuizTakingInterface({ params }: { params: { quizId: stri
     }
   };
 
-  const handleSubmit = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
     let calculatedScore = 0;
     mockQuiz.questions.forEach((q, index) => {
       if (answers[index] === q.correctAnswer) {
         calculatedScore++;
       }
     });
-    setScore(Math.round((calculatedScore / mockQuiz.questions.length) * 100));
-    setIsSubmitted(true);
+    const finalScore = Math.round((calculatedScore / mockQuiz.questions.length) * 100);
+    setScore(finalScore);
+    
+    setIsSubmitting(true);
+    try {
+      // Import the server action dynamically to avoid build issues in client components if needed,
+      // but in Next 14 we can just import it at the top. Let's assume we import it.
+      const { submitQuizAttempt } = await import("@/app/actions/quiz");
+      await submitQuizAttempt(params.quizId, finalScore, mockQuiz.timeLimit - timeLeft);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSubmitted(true);
+      setIsSubmitting(false);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -207,9 +222,15 @@ export default function QuizTakingInterface({ params }: { params: { quizId: stri
         {currentQuestionIndex === mockQuiz.questions.length - 1 ? (
           <button
             onClick={handleSubmit}
-            className="px-8 py-3 bg-success-600 hover:bg-success-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-success-600/20 flex items-center gap-2"
+            disabled={isSubmitting}
+            className="px-8 py-3 bg-success-600 hover:bg-success-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-success-600/20 flex items-center gap-2 disabled:opacity-70 disabled:cursor-wait"
           >
-            <CheckCircle2 className="w-5 h-5" /> Submit Quiz
+            {isSubmitting ? (
+              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <CheckCircle2 className="w-5 h-5" />
+            )}
+            {isSubmitting ? "Submitting..." : "Submit Quiz"}
           </button>
         ) : (
           <button
