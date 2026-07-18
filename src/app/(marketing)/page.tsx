@@ -107,9 +107,9 @@ export default function LandingPage() {
               <p className="text-text-secondary leading-relaxed mb-8">
                 Our smart engine automatically grades quizzes, identifies weak points, and suggests targeted lessons to ensure mastery.
               </p>
-              <div className="flex gap-2 text-secondary-600 font-bold items-center group-hover:translate-x-2 transition-transform cursor-pointer">
+              <Link href="/about" className="flex gap-2 text-secondary-600 font-bold items-center group-hover:translate-x-2 transition-transform cursor-pointer">
                 Learn more <ArrowRight className="w-4 h-4" />
-              </div>
+              </Link>
             </div>
 
             {/* Feature 3 */}
@@ -122,9 +122,9 @@ export default function LandingPage() {
               <p className="text-text-secondary leading-relaxed mb-8">
                 Complete transparency for parents. Monitor attendance, review assignment scores, and handle tuition payments in one secure dashboard.
               </p>
-              <div className="flex gap-2 text-accent-600 font-bold items-center group-hover:translate-x-2 transition-transform cursor-pointer">
+              <Link href="/register/parent" className="flex gap-2 text-accent-600 font-bold items-center group-hover:translate-x-2 transition-transform cursor-pointer">
                 See it in action <ArrowRight className="w-4 h-4" />
-              </div>
+              </Link>
             </div>
 
             {/* Feature 4 */}

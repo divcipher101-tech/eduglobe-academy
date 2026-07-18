@@ -4,27 +4,55 @@ import { useState, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { User, BookOpen, Users, ArrowLeft, Loader2, AlertCircle, Eye, EyeOff, GraduationCap } from "lucide-react";
-import { Role } from "@/lib/permissions";
+
+type RoleColor = "primary" | "secondary" | "accent";
 
 const ROLE_INFO = {
   student: {
     title: "Student Registration",
     subtitle: "Join courses, take quizzes, and track your progress.",
     icon: User,
-    color: "primary",
+    color: "primary" as RoleColor,
   },
   parent: {
     title: "Parent Registration",
     subtitle: "Monitor your child's progress and manage payments.",
     icon: Users,
-    color: "secondary",
+    color: "secondary" as RoleColor,
   },
   tutor: {
     title: "Tutor Application",
     subtitle: "Host classes, manage assignments, and earn money.",
     icon: GraduationCap,
-    color: "accent",
+    color: "accent" as RoleColor,
   },
+};
+
+const THEME_CLASSES = {
+  primary: {
+    iconBg: "bg-primary-50 text-primary-600 border-primary-100",
+    inputFocus: "focus:ring-primary-500/10 focus:border-primary-500",
+    iconHover: "hover:text-primary-500",
+    btn: "bg-primary-600 hover:bg-primary-500 shadow-primary-500/20",
+    link: "text-primary-600 hover:text-primary-700",
+    gradientText: "text-primary-300",
+  },
+  secondary: {
+    iconBg: "bg-secondary-50 text-secondary-600 border-secondary-100",
+    inputFocus: "focus:ring-secondary-500/10 focus:border-secondary-500",
+    iconHover: "hover:text-secondary-500",
+    btn: "bg-secondary-600 hover:bg-secondary-500 shadow-secondary-500/20",
+    link: "text-secondary-600 hover:text-secondary-700",
+    gradientText: "text-secondary-300",
+  },
+  accent: {
+    iconBg: "bg-accent-50 text-accent-600 border-accent-100",
+    inputFocus: "focus:ring-accent-500/10 focus:border-accent-500",
+    iconHover: "hover:text-accent-500",
+    btn: "bg-accent-600 hover:bg-accent-500 shadow-accent-500/20",
+    link: "text-accent-600 hover:text-accent-700",
+    gradientText: "text-accent-300",
+  }
 };
 
 export default function RoleRegistrationForm({ 
@@ -51,6 +79,8 @@ export default function RoleRegistrationForm({
       </div>
     );
   }
+
+  const theme = THEME_CLASSES[info.color];
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -117,8 +147,11 @@ export default function RoleRegistrationForm({
     <div className="min-h-screen bg-bg-primary flex">
       {/* Left Side - Animated Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-primary-900 p-12 flex-col justify-between">
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
-        <div className={`absolute top-[-20%] left-[-10%] w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,_var(--${info.color}-600)_0%,_transparent_60%)] -z-10 blur-3xl opacity-50`}></div>
+        <div className="absolute inset-0 bg-black/5 opacity-20 mix-blend-overlay"></div>
+        <div 
+          className="absolute top-[-20%] left-[-10%] w-[150%] h-[150%] -z-10 blur-3xl opacity-50"
+          style={{ backgroundImage: `radial-gradient(circle at center, var(--${info.color}-600) 0%, transparent 60%)` }}
+        ></div>
         
         <Link href="/" className="relative z-10 flex items-center gap-3 text-white">
           <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
@@ -133,7 +166,7 @@ export default function RoleRegistrationForm({
           </div>
           <h1 className="text-5xl font-display font-bold text-white leading-tight">
             Begin your <br />
-            <span className={`text-${info.color}-300`}>educational journey.</span>
+            <span className={theme.gradientText}>educational journey.</span>
           </h1>
           <p className="text-primary-100/80 text-lg max-w-md">
             {info.subtitle} Experience the next generation of learning with EduGlobe.
@@ -155,7 +188,7 @@ export default function RoleRegistrationForm({
             >
               <ArrowLeft className="w-5 h-5" />
             </Link>
-            <div className={`w-10 h-10 rounded-xl bg-${info.color}-50 text-${info.color}-600 flex items-center justify-center shrink-0 border border-${info.color}-100 shadow-sm`}>
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-sm ${theme.iconBg}`}>
               <Icon className="w-5 h-5" />
             </div>
             <h2 className="text-2xl font-display font-bold text-text-primary">{info.title}</h2>
@@ -180,7 +213,7 @@ export default function RoleRegistrationForm({
                   type="text"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium focus:ring-${info.color}-500/10 focus:border-${info.color}-500`}
+                  className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
                   placeholder="John"
                   required
                 />
@@ -193,7 +226,7 @@ export default function RoleRegistrationForm({
                   type="text"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium focus:ring-${info.color}-500/10 focus:border-${info.color}-500`}
+                  className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
                   placeholder="Doe"
                   required
                 />
@@ -208,7 +241,7 @@ export default function RoleRegistrationForm({
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium focus:ring-${info.color}-500/10 focus:border-${info.color}-500`}
+                className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
                 placeholder="you@example.com"
                 required
               />
@@ -223,7 +256,7 @@ export default function RoleRegistrationForm({
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full pl-4 pr-12 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium focus:ring-${info.color}-500/10 focus:border-${info.color}-500`}
+                  className={`w-full pl-4 pr-12 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
                   placeholder="••••••••"
                   required
                   minLength={8}
@@ -231,7 +264,7 @@ export default function RoleRegistrationForm({
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className={`absolute inset-y-0 right-0 pr-4 flex items-center transition-colors text-text-tertiary hover:text-${info.color}-500`}
+                  className={`absolute inset-y-0 right-0 pr-4 flex items-center transition-colors text-text-tertiary ${theme.iconHover}`}
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -248,7 +281,7 @@ export default function RoleRegistrationForm({
                   type={showPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full pl-4 pr-12 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium focus:ring-${info.color}-500/10 focus:border-${info.color}-500`}
+                  className={`w-full pl-4 pr-12 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
                   placeholder="••••••••"
                   required
                   minLength={8}
@@ -258,7 +291,7 @@ export default function RoleRegistrationForm({
 
             <button 
               type="submit" 
-              className={`w-full py-4 rounded-2xl text-lg font-bold mt-8 shadow-xl flex items-center justify-center gap-2 hover:-translate-y-1 transition-all text-white bg-${info.color}-600 hover:bg-${info.color}-500 shadow-${info.color}-500/20`}
+              className={`w-full py-4 rounded-2xl text-lg font-bold mt-8 shadow-xl flex items-center justify-center gap-2 hover:-translate-y-1 transition-all text-white ${theme.btn}`}
               disabled={isLoading}
             >
               {isLoading ? (
@@ -271,15 +304,15 @@ export default function RoleRegistrationForm({
 
           <div className="mt-8 pt-8 border-t border-glass-border text-center text-sm font-medium text-text-tertiary">
             By creating an account, you agree to our{" "}
-            <Link href="/terms" className={`text-${info.color}-600 hover:text-${info.color}-700 font-bold transition-colors`}>Terms of Service</Link>
+            <Link href="/terms" className={`font-bold transition-colors ${theme.link}`}>Terms of Service</Link>
             {" "}and{" "}
-            <Link href="/privacy" className={`text-${info.color}-600 hover:text-${info.color}-700 font-bold transition-colors`}>Privacy Policy</Link>.
+            <Link href="/privacy" className={`font-bold transition-colors ${theme.link}`}>Privacy Policy</Link>.
           </div>
           
           <div className="text-center mt-4">
             <p className="text-sm font-medium text-text-secondary">
               Already have an account?{" "}
-              <Link href="/login" className={`text-${info.color}-600 hover:text-${info.color}-700 font-bold transition-colors`}>
+              <Link href="/login" className={`font-bold transition-colors ${theme.link}`}>
                 Sign in here
               </Link>
             </p>
