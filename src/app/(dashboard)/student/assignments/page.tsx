@@ -30,7 +30,7 @@ export default async function AssignmentsDashboard() {
         include: { course: true }
       }
     },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { submittedAt: 'desc' }
   });
 
   // Since brand new students won't have assignments (because no courses and no assignments seeded),
@@ -117,7 +117,7 @@ export default async function AssignmentsDashboard() {
                     </span>
                     {sub.status === "GRADED" && (
                       <span className="text-xs font-bold px-2 py-1 rounded-md bg-bg-tertiary text-text-secondary">
-                        {Number(sub.score)}/{Number(sub.assignment.maxPoints)} Points
+                        {Number(sub.marksObtained)}/{Number(sub.assignment.totalMarks)} Points
                       </span>
                     )}
                   </div>
