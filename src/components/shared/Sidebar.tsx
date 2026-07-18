@@ -53,7 +53,7 @@ const getRoleLinks = (role: Role): NavItem[] => {
     case "ADMIN":
       return [
         { title: "Overview", href: "/admin", icon: LayoutDashboard },
-        { title: "Users", href: "/admin/users", icon: Users },
+        { title: "Directory", href: "/admin/users", icon: Users },
         { title: "Courses", href: "/admin/courses", icon: BookOpen },
         { title: "Finances", href: "/admin/finances", icon: CreditCard },
         { title: "Branches", href: "/admin/branches", icon: Building },
