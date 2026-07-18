@@ -1,5 +1,3 @@
-import { StreamingTextResponse } from "ai";
-
 // We're creating a mocked streaming response because we don't have an OpenAI API key yet.
 // This allows the frontend `useChat` hook to work perfectly as if it was connected to GPT-4.
 export async function POST(req: Request) {
@@ -31,6 +29,8 @@ export async function POST(req: Request) {
     },
   });
 
-  // Return the stream via Vercel AI SDK's StreamingTextResponse
-  return new StreamingTextResponse(stream);
+  // Return standard streaming response
+  return new Response(stream, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
 }
