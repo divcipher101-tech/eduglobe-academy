@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { Users, GraduationCap, TrendingUp, AlertCircle, Calendar, ChevronRight } from "lucide-react";
+import { Users, GraduationCap, TrendingUp, AlertCircle, Calendar, ChevronRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 
 export default async function ParentDashboard() {
