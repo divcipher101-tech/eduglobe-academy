@@ -3,7 +3,7 @@
 import { useState, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, BookOpen, Users, ArrowLeft, Loader2, AlertCircle } from "lucide-react";
+import { User, BookOpen, Users, ArrowLeft, Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Role } from "@/lib/permissions";
 
 const ROLE_INFO = {
@@ -57,6 +57,7 @@ export default function RoleRegistrationForm({
   
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -175,33 +176,45 @@ export default function RoleRegistrationForm({
 
         <div className="form-group">
           <label className="form-label form-label-required" htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="form-input"
-            placeholder="••••••••"
-            required
-            minLength={8}
-          />
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onChange={handleChange}
+              className="form-input pr-10"
+              placeholder="••••••••"
+              required
+              minLength={8}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition-colors"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
           <p className="form-helper">Must be at least 8 characters long</p>
         </div>
 
         <div className="form-group">
           <label className="form-label form-label-required" htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="form-input"
-            placeholder="••••••••"
-            required
-            minLength={8}
-          />
+          <div className="relative">
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="form-input pr-10"
+              placeholder="••••••••"
+              required
+              minLength={8}
+            />
+          </div>
         </div>
 
         <button 
