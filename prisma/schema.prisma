@@ -1,0 +1,1170 @@
+// ============================================================
+// EduGlobe Academy — Prisma Schema
+// 45 Models · 9 Domains · PostgreSQL
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum RoleName {
+  STUDENT
+  TUTOR
+  PARENT
+  ADMIN
+  BRANCH_MANAGER
+}
+
+enum EducationLevelEnum {
+  PRESCHOOL
+  PRIMARY
+  SECONDARY
+  A_LEVEL
+  UNDERGRADUATE
+}
+
+enum TutorApplicationStatus {
+  PENDING
+  INTERVIEW
+  APPROVED
+  REJECTED
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContentType {
+  VIDEO
+  DOCUMENT
+  QUIZ
+  INTERACTIVE
+  TEXT
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+  SUSPENDED
+}
+
+enum LessonStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ClassType {
+  LIVE
+  RECORDED
+}
+
+enum ClassStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum AssignmentType {
+  HOMEWORK
+  TEST
+  PROJECT
+  CLASSWORK
+}
+
+enum ItemStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  RETURNED
+  RESUBMIT
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+  ESSAY
+  FILL_BLANK
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  ONE_TIME
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  VOID
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+  PENDING
+  REFUNDED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum NotificationType {
+  CLASS_REMINDER
+  GRADE_POSTED
+  PAYMENT_DUE
+  ASSIGNMENT_DUE
+  SYSTEM
+  WELCOME
+  TUTOR_APPROVED
+}
+
+enum ConversationType {
+  DIRECT
+  GROUP
+  COURSE
+}
+
+enum EmailStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  BOUNCED
+  FAILED
+}
+
+// ============================================================
+// DOMAIN 1: USERS & AUTH
+// ============================================================
+
+/// Core user model for all platform participants.
+model User {
+  id                     String    @id @default(uuid())
+  email                  String    @unique
+  passwordHash           String?   @map("password_hash")
+  firstName              String    @map("first_name")
+  lastName               String    @map("last_name")
+  phone                  String?
+  avatarUrl              String?   @map("avatar_url")
+  dateOfBirth            DateTime? @map("date_of_birth")
+  gender                 String?
+  timezone               String    @default("UTC")
+  preferredLang          String    @default("en") @map("preferred_lang")
+  isActive               Boolean   @default(true) @map("is_active")
+  isEmailVerified        Boolean   @default(false) @map("is_email_verified")
+  emailVerificationToken String?   @map("email_verification_token")
+  passwordResetToken     String?   @map("password_reset_token")
+  passwordResetExpires   DateTime? @map("password_reset_expires")
+  twoFactorSecret        String?   @map("two_factor_secret")
+  twoFactorEnabled       Boolean   @default(false) @map("two_factor_enabled")
+  lastLoginAt            DateTime? @map("last_login_at")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+
+  // --- Relations ---
+  userRoles                UserRole[]
+  studentProfile           StudentProfile?
+  tutorProfile             TutorProfile?
+  parentLinks              ParentStudentLink[]          @relation("ParentUser")
+  childLinks               ParentStudentLink[]          @relation("StudentUser")
+  studentProfiles          StudentProfile[]             @relation("ParentOfStudent")
+  grantedRoles             UserRole[]                   @relation("GrantedByUser")
+  taughtCourses            Course[]
+  classesAsTutor           Class[]                      @relation("ClassTutor")
+  courseEnrollments         CourseEnrollment[]
+  classEnrollments         ClassEnrollment[]
+  classAttendances         ClassAttendance[]            @relation("AttendeeUser")
+  markedAttendances        ClassAttendance[]            @relation("MarkerUser")
+  createdAssignments       Assignment[]                 @relation("AssignmentCreator")
+  assignmentSubmissions    AssignmentSubmission[]       @relation("SubmissionStudent")
+  gradedSubmissions        AssignmentSubmission[]       @relation("SubmissionGrader")
+  createdQuizzes           Quiz[]
+  quizAttempts             QuizAttempt[]
+  userSubscriptions        UserSubscription[]
+  invoices                 Invoice[]
+  payments                 Payment[]
+  notifications            Notification[]
+  sentMessages             Message[]
+  createdConversations     Conversation[]
+  conversationParticipants ConversationParticipant[]
+  emailLogs                EmailLog[]
+  progressSnapshots        StudentProgressSnapshot[]
+  tutorPerformances        TutorPerformance[]
+  engagementEvents         EngagementEvent[]
+  givenReviews             TutorReview[]                @relation("ReviewStudent")
+  receivedReviews          TutorReview[]                @relation("ReviewTutor")
+  auditLogs                AuditLog[]
+  lessonProgress           LessonProgress[]
+  branchManagers           BranchManager[]
+  accounts                 Account[]
+  sessions                 Session[]
+
+  @@map("users")
+}
+
+/// OAuth account link for NextAuth integration.
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+/// Session storage for NextAuth.
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+/// Platform roles (STUDENT, TUTOR, PARENT, ADMIN, BRANCH_MANAGER).
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        RoleName @unique
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
+
+  @@map("roles")
+}
+
+/// Many-to-many assignment of roles to users, optionally scoped to a branch.
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  roleId    Int      @map("role_id")
+  branchId  String?  @map("branch_id")
+  grantedAt DateTime @default(now()) @map("granted_at")
+  grantedBy String?  @map("granted_by")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  branch  Branch? @relation(fields: [branchId], references: [id])
+  grantor User?   @relation("GrantedByUser", fields: [grantedBy], references: [id])
+
+  @@unique([userId, roleId, branchId])
+  @@index([userId])
+  @@map("user_roles")
+}
+
+/// Granular permission entries.
+model Permission {
+  id          Int    @id @default(autoincrement())
+  code        String @unique
+  description String?
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+/// Junction table linking roles to permissions.
+model RolePermission {
+  roleId       Int @map("role_id")
+  permissionId Int @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+/// Extended profile data for students.
+model StudentProfile {
+  id             String             @id @default(uuid())
+  userId         String             @unique @map("user_id")
+  educationLevel EducationLevelEnum? @map("education_level")
+  schoolName     String?            @map("school_name")
+  enrollmentDate DateTime           @default(now()) @map("enrollment_date")
+  parentId       String?            @map("parent_id")
+  branchId       String?            @map("branch_id")
+  gradeYear      String?            @map("grade_year")
+
+  user   User    @relation(fields: [userId], references: [id])
+  parent User?   @relation("ParentOfStudent", fields: [parentId], references: [id])
+  branch Branch? @relation(fields: [branchId], references: [id])
+
+  @@map("student_profiles")
+}
+
+/// Extended profile data for tutors including verification and rating.
+model TutorProfile {
+  id                String                 @id @default(uuid())
+  userId            String                 @unique @map("user_id")
+  bio               String?
+  qualifications    String?
+  cvUrl             String?                @map("cv_url")
+  hourlyRate        Decimal?               @map("hourly_rate") @db.Decimal(10, 2)
+  currency          String                 @default("GBP")
+  ratingAvg         Decimal                @default(0) @map("rating_avg") @db.Decimal(3, 2)
+  totalReviews      Int                    @default(0) @map("total_reviews")
+  isVerified        Boolean                @default(false) @map("is_verified")
+  applicationStatus TutorApplicationStatus @default(PENDING) @map("application_status")
+  branchId          String?                @map("branch_id")
+  specializations   String[]               @default([])
+  demoClassUrl      String?                @map("demo_class_url")
+
+  user   User    @relation(fields: [userId], references: [id])
+  branch Branch? @relation(fields: [branchId], references: [id])
+
+  @@map("tutor_profiles")
+}
+
+/// Links a parent user to a student user.
+model ParentStudentLink {
+  id           String   @id @default(uuid())
+  parentId     String   @map("parent_id")
+  studentId    String   @map("student_id")
+  relationship String   @default("PARENT")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  parent  User @relation("ParentUser", fields: [parentId], references: [id], onDelete: Cascade)
+  student User @relation("StudentUser", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([parentId, studentId])
+  @@map("parent_student_links")
+}
+
+// ============================================================
+// DOMAIN 2: BRANCHES
+// ============================================================
+
+/// Physical or virtual branch / campus of the academy.
+model Branch {
+  id        String   @id @default(uuid())
+  name      String
+  code      String   @unique
+  address   String?
+  city      String?
+  country   String?
+  phone     String?
+  email     String?
+  timezone  String   @default("UTC")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userRoles         UserRole[]
+  studentProfiles   StudentProfile[]
+  tutorProfiles     TutorProfile[]
+  courses           Course[]
+  classes           Class[]
+  branchManagers    BranchManager[]
+  userSubscriptions UserSubscription[]
+  invoices          Invoice[]
+  systemSettings    SystemSetting[]
+
+  @@map("branches")
+}
+
+/// Maps a user as a manager for a specific branch.
+model BranchManager {
+  userId     String   @map("user_id")
+  branchId   String   @map("branch_id")
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@id([userId, branchId])
+  @@map("branch_managers")
+}
+
+// ============================================================
+// DOMAIN 3: COURSES & CURRICULUM
+// ============================================================
+
+/// Top-level curriculum type (e.g. IGCSE, A-Level, National).
+model CurriculumType {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  country     String?
+  description String?
+
+  subjects Subject[]
+  courses  Course[]
+
+  @@map("curriculum_types")
+}
+
+/// Education level reference data (distinct from the enum, used for lookups).
+model EducationLevel {
+  id           Int    @id @default(autoincrement())
+  name         String @unique
+  displayOrder Int    @default(0) @map("display_order")
+
+  subjects Subject[]
+  courses  Course[]
+
+  @@map("education_levels")
+}
+
+/// Academic subject (e.g. Mathematics, Physics).
+model Subject {
+  id               String   @id @default(uuid())
+  name             String
+  code             String?  @unique
+  educationLevelId Int?     @map("education_level_id")
+  curriculumTypeId Int?     @map("curriculum_type_id")
+  description      String?
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  educationLevel EducationLevel? @relation(fields: [educationLevelId], references: [id])
+  curriculumType CurriculumType? @relation(fields: [curriculumTypeId], references: [id])
+  courses        Course[]
+
+  @@index([educationLevelId])
+  @@index([curriculumTypeId])
+  @@map("subjects")
+}
+
+/// A course offered on the platform.
+model Course {
+  id               String       @id @default(uuid())
+  title            String
+  slug             String       @unique
+  description      String?
+  subjectId        String?      @map("subject_id")
+  educationLevelId Int?         @map("education_level_id")
+  curriculumTypeId Int?         @map("curriculum_type_id")
+  branchId         String?      @map("branch_id")
+  tutorId          String?      @map("tutor_id")
+  thumbnailUrl     String?      @map("thumbnail_url")
+  price            Decimal      @default(0) @db.Decimal(10, 2)
+  currency         String       @default("GBP")
+  maxStudents      Int?         @map("max_students")
+  status           CourseStatus @default(DRAFT)
+  startDate        DateTime?    @map("start_date")
+  endDate          DateTime?    @map("end_date")
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  subject           Subject?                  @relation(fields: [subjectId], references: [id])
+  educationLevel    EducationLevel?           @relation(fields: [educationLevelId], references: [id])
+  curriculumType    CurriculumType?           @relation(fields: [curriculumTypeId], references: [id])
+  branch            Branch?                   @relation(fields: [branchId], references: [id])
+  tutor             User?                     @relation(fields: [tutorId], references: [id])
+  modules           CourseModule[]
+  enrollments       CourseEnrollment[]
+  resources         CourseResource[]
+  classes           Class[]
+  assignments       Assignment[]
+  quizzes           Quiz[]
+  invoices          Invoice[]
+  conversations     Conversation[]
+  tutorReviews      TutorReview[]
+  progressSnapshots StudentProgressSnapshot[]
+
+  @@index([subjectId])
+  @@index([branchId])
+  @@index([tutorId])
+  @@map("courses")
+}
+
+/// A module (section) within a course.
+model CourseModule {
+  id          String   @id @default(uuid())
+  courseId    String   @map("course_id")
+  title       String
+  description String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  course      Course           @relation(fields: [courseId], references: [id])
+  lessons     CourseLesson[]
+  resources   CourseResource[]
+  assignments Assignment[]
+  quizzes     Quiz[]
+
+  @@map("course_modules")
+}
+
+/// An individual lesson within a module.
+model CourseLesson {
+  id              String      @id @default(uuid())
+  moduleId        String      @map("module_id")
+  title           String
+  contentType     ContentType @map("content_type")
+  contentUrl      String?     @map("content_url")
+  contentText     String?     @map("content_text")
+  durationMinutes Int?        @map("duration_minutes")
+  sortOrder       Int         @default(0) @map("sort_order")
+  isFreePreview   Boolean     @default(false) @map("is_free_preview")
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  module         CourseModule     @relation(fields: [moduleId], references: [id])
+  lessonProgress LessonProgress[]
+
+  @@map("course_lessons")
+}
+
+/// Tracks a student's enrollment in a course.
+model CourseEnrollment {
+  id          String           @id @default(uuid())
+  courseId    String           @map("course_id")
+  studentId  String           @map("student_id")
+  enrolledAt DateTime         @default(now()) @map("enrolled_at")
+  status     EnrollmentStatus @default(ACTIVE)
+  completedAt DateTime?       @map("completed_at")
+  progressPct Decimal         @default(0) @map("progress_pct") @db.Decimal(5, 2)
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  course  Course @relation(fields: [courseId], references: [id])
+  student User   @relation(fields: [studentId], references: [id])
+
+  @@unique([courseId, studentId])
+  @@index([studentId])
+  @@map("course_enrollments")
+}
+
+/// Tracks per-lesson progress for a student.
+model LessonProgress {
+  id           String       @id @default(uuid())
+  studentId    String       @map("student_id")
+  lessonId     String       @map("lesson_id")
+  status       LessonStatus @default(NOT_STARTED)
+  startedAt    DateTime?    @map("started_at")
+  completedAt  DateTime?    @map("completed_at")
+  timeSpentSec Int          @default(0) @map("time_spent_sec")
+
+  student User         @relation(fields: [studentId], references: [id])
+  lesson  CourseLesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([studentId, lessonId])
+  @@index([studentId])
+  @@map("lesson_progress")
+}
+
+/// Supplementary resource file attached to a course or module.
+model CourseResource {
+  id            String   @id @default(uuid())
+  courseId       String   @map("course_id")
+  moduleId       String?  @map("module_id")
+  title          String
+  fileUrl        String   @map("file_url")
+  fileType       String?  @map("file_type")
+  fileSizeBytes  BigInt?  @map("file_size_bytes")
+  uploadedAt     DateTime @default(now()) @map("uploaded_at")
+
+  course Course       @relation(fields: [courseId], references: [id])
+  module CourseModule? @relation(fields: [moduleId], references: [id])
+
+  @@map("course_resources")
+}
+
+// ============================================================
+// DOMAIN 4: LIVE CLASSES
+// ============================================================
+
+/// A scheduled live or recorded class session.
+model Class {
+  id               String      @id @default(uuid())
+  courseId          String?     @map("course_id")
+  title            String
+  description      String?
+  tutorId          String      @map("tutor_id")
+  branchId         String?     @map("branch_id")
+  classType        ClassType   @map("class_type")
+  scheduledStart   DateTime    @map("scheduled_start")
+  scheduledEnd     DateTime    @map("scheduled_end")
+  actualStart      DateTime?   @map("actual_start")
+  actualEnd        DateTime?   @map("actual_end")
+  meetingUrl       String?     @map("meeting_url")
+  recordingUrl     String?     @map("recording_url")
+  maxParticipants  Int?        @map("max_participants")
+  status           ClassStatus @default(SCHEDULED)
+  recurrenceRule   String?     @map("recurrence_rule")
+  parentClassId    String?     @map("parent_class_id")
+  aiSummary        String?     @map("ai_summary")
+  createdAt        DateTime    @default(now()) @map("created_at")
+
+  course           Course?           @relation(fields: [courseId], references: [id])
+  tutor            User              @relation("ClassTutor", fields: [tutorId], references: [id])
+  branch           Branch?           @relation(fields: [branchId], references: [id])
+  parentClass      Class?            @relation("ClassRecurrence", fields: [parentClassId], references: [id])
+  childClasses     Class[]           @relation("ClassRecurrence")
+  classEnrollments ClassEnrollment[]
+  attendances      ClassAttendance[]
+
+  @@index([tutorId, scheduledStart])
+  @@index([courseId])
+  @@map("classes")
+}
+
+/// Student registration for a specific class session.
+model ClassEnrollment {
+  id           String   @id @default(uuid())
+  classId      String   @map("class_id")
+  studentId    String   @map("student_id")
+  registeredAt DateTime @default(now()) @map("registered_at")
+
+  class   Class @relation(fields: [classId], references: [id])
+  student User  @relation(fields: [studentId], references: [id])
+
+  @@unique([classId, studentId])
+  @@map("class_enrollments")
+}
+
+/// Attendance record for a class session.
+model ClassAttendance {
+  id              String           @id @default(uuid())
+  classId         String           @map("class_id")
+  userId          String           @map("user_id")
+  status          AttendanceStatus
+  joinedAt        DateTime?        @map("joined_at")
+  leftAt          DateTime?        @map("left_at")
+  durationMinutes Int?             @map("duration_minutes")
+  deviceType      String?          @map("device_type")
+  operatingSystem String?          @map("operating_system")
+  browserType     String?          @map("browser_type")
+  ipAddress       String?          @map("ip_address")
+  markedById      String?          @map("marked_by_id")
+  notes           String?
+
+  class    Class @relation(fields: [classId], references: [id])
+  user     User  @relation("AttendeeUser", fields: [userId], references: [id])
+  markedBy User? @relation("MarkerUser", fields: [markedById], references: [id])
+
+  @@unique([classId, userId])
+  @@index([classId])
+  @@map("class_attendance")
+}
+
+// ============================================================
+// DOMAIN 5: ASSIGNMENTS & QUIZZES
+// ============================================================
+
+/// An assignment (homework, test, project, classwork) within a course.
+model Assignment {
+  id             String         @id @default(uuid())
+  courseId        String         @map("course_id")
+  moduleId        String?        @map("module_id")
+  title           String
+  description     String?
+  assignmentType  AssignmentType @map("assignment_type")
+  totalMarks      Decimal        @default(100) @map("total_marks") @db.Decimal(6, 2)
+  passingMarks    Decimal?       @map("passing_marks") @db.Decimal(6, 2)
+  dueDate         DateTime?      @map("due_date")
+  allowLate       Boolean        @default(false) @map("allow_late")
+  latePenaltyPct  Decimal        @default(0) @map("late_penalty_pct") @db.Decimal(5, 2)
+  maxAttempts     Int            @default(1) @map("max_attempts")
+  createdById     String         @map("created_by_id")
+  status          ItemStatus     @default(DRAFT)
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  course      Course                 @relation(fields: [courseId], references: [id])
+  module      CourseModule?          @relation(fields: [moduleId], references: [id])
+  createdBy   User                   @relation("AssignmentCreator", fields: [createdById], references: [id])
+  submissions AssignmentSubmission[]
+
+  @@index([courseId])
+  @@map("assignments")
+}
+
+/// A student's submission for an assignment.
+model AssignmentSubmission {
+  id             String           @id @default(uuid())
+  assignmentId   String           @map("assignment_id")
+  studentId      String           @map("student_id")
+  attemptNumber  Int              @default(1) @map("attempt_number")
+  submissionText String?          @map("submission_text")
+  fileUrl        String?          @map("file_url")
+  submittedAt    DateTime         @default(now()) @map("submitted_at")
+  isLate         Boolean          @default(false) @map("is_late")
+  status         SubmissionStatus @default(SUBMITTED)
+  marksObtained  Decimal?         @map("marks_obtained") @db.Decimal(6, 2)
+  feedback       String?
+  gradedById     String?          @map("graded_by_id")
+  gradedAt       DateTime?        @map("graded_at")
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  student    User       @relation("SubmissionStudent", fields: [studentId], references: [id])
+  gradedBy   User?      @relation("SubmissionGrader", fields: [gradedById], references: [id])
+
+  @@index([assignmentId])
+  @@index([studentId])
+  @@map("assignment_submissions")
+}
+
+/// A quiz associated with a course and optionally a module.
+model Quiz {
+  id               String     @id @default(uuid())
+  courseId          String     @map("course_id")
+  moduleId          String?    @map("module_id")
+  title             String
+  description       String?
+  timeLimitMin      Int?       @map("time_limit_min")
+  totalMarks        Decimal    @default(100) @map("total_marks") @db.Decimal(6, 2)
+  passingMarks      Decimal?   @map("passing_marks") @db.Decimal(6, 2)
+  maxAttempts       Int        @default(1) @map("max_attempts")
+  shuffleQuestions  Boolean    @default(false) @map("shuffle_questions")
+  showAnswers       Boolean    @default(false) @map("show_answers")
+  availableFrom     DateTime?  @map("available_from")
+  availableUntil    DateTime?  @map("available_until")
+  status            ItemStatus @default(DRAFT)
+  createdById       String     @map("created_by_id")
+  createdAt         DateTime   @default(now()) @map("created_at")
+
+  course    Course         @relation(fields: [courseId], references: [id])
+  module    CourseModule?  @relation(fields: [moduleId], references: [id])
+  createdBy User           @relation(fields: [createdById], references: [id])
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
+
+  @@index([courseId])
+  @@map("quizzes")
+}
+
+/// A single question within a quiz.
+model QuizQuestion {
+  id           String       @id @default(uuid())
+  quizId       String       @map("quiz_id")
+  questionText String       @map("question_text")
+  questionType QuestionType @map("question_type")
+  marks        Decimal      @default(1) @db.Decimal(5, 2)
+  sortOrder    Int          @default(0) @map("sort_order")
+  explanation  String?
+  mediaUrl     String?      @map("media_url")
+
+  quiz    Quiz                 @relation(fields: [quizId], references: [id])
+  options QuizQuestionOption[]
+  answers QuizAnswer[]
+
+  @@map("quiz_questions")
+}
+
+/// An answer option for a multiple-choice quiz question.
+model QuizQuestionOption {
+  id         String  @id @default(uuid())
+  questionId String  @map("question_id")
+  optionText String  @map("option_text")
+  isCorrect  Boolean @default(false) @map("is_correct")
+  sortOrder  Int     @default(0) @map("sort_order")
+
+  question          QuizQuestion @relation(fields: [questionId], references: [id])
+  selectedInAnswers QuizAnswer[]
+
+  @@map("quiz_question_options")
+}
+
+/// A student's attempt at a quiz.
+model QuizAttempt {
+  id            String    @id @default(uuid())
+  quizId        String    @map("quiz_id")
+  studentId     String    @map("student_id")
+  attemptNumber Int       @default(1) @map("attempt_number")
+  startedAt     DateTime  @default(now()) @map("started_at")
+  completedAt   DateTime? @map("completed_at")
+  score         Decimal?  @db.Decimal(6, 2)
+  passed        Boolean?
+  timeTakenSec  Int?      @map("time_taken_sec")
+
+  quiz    Quiz         @relation(fields: [quizId], references: [id])
+  student User         @relation(fields: [studentId], references: [id])
+  answers QuizAnswer[]
+
+  @@index([quizId, studentId])
+  @@map("quiz_attempts")
+}
+
+/// An individual answer within a quiz attempt.
+model QuizAnswer {
+  id               String   @id @default(uuid())
+  attemptId        String   @map("attempt_id")
+  questionId       String   @map("question_id")
+  selectedOptionId String?  @map("selected_option_id")
+  answerText       String?  @map("answer_text")
+  isCorrect        Boolean? @map("is_correct")
+  marksAwarded     Decimal? @map("marks_awarded") @db.Decimal(5, 2)
+
+  attempt        QuizAttempt         @relation(fields: [attemptId], references: [id])
+  question       QuizQuestion        @relation(fields: [questionId], references: [id])
+  selectedOption QuizQuestionOption? @relation(fields: [selectedOptionId], references: [id])
+
+  @@map("quiz_answers")
+}
+
+// ============================================================
+// DOMAIN 6: PAYMENTS
+// ============================================================
+
+/// A subscription plan offered to users.
+model SubscriptionPlan {
+  id             String       @id @default(uuid())
+  name           String
+  description    String?
+  billingCycle   BillingCycle  @map("billing_cycle")
+  price          Decimal      @db.Decimal(10, 2)
+  currency       String       @default("GBP")
+  maxCourses     Int?         @map("max_courses")
+  maxLiveClasses Int?         @map("max_live_classes")
+  features       Json?
+  isActive       Boolean      @default(true) @map("is_active")
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  userSubscriptions UserSubscription[]
+
+  @@map("subscription_plans")
+}
+
+/// A user's active or historical subscription.
+model UserSubscription {
+  id             String             @id @default(uuid())
+  userId         String             @map("user_id")
+  planId         String             @map("plan_id")
+  branchId       String?            @map("branch_id")
+  status         SubscriptionStatus @default(ACTIVE)
+  startsAt       DateTime           @map("starts_at")
+  expiresAt      DateTime?          @map("expires_at")
+  autoRenew      Boolean            @default(true) @map("auto_renew")
+  paymentGateway String?            @map("payment_gateway")
+  gatewaySubId   String?            @map("gateway_sub_id")
+  cancelledAt    DateTime?          @map("cancelled_at")
+  createdAt      DateTime           @default(now()) @map("created_at")
+
+  user     User             @relation(fields: [userId], references: [id])
+  plan     SubscriptionPlan @relation(fields: [planId], references: [id])
+  branch   Branch?          @relation(fields: [branchId], references: [id])
+  invoices Invoice[]
+
+  @@map("user_subscriptions")
+}
+
+/// An invoice issued to a user for a subscription or course purchase.
+model Invoice {
+  id             String        @id @default(uuid())
+  invoiceNumber  String        @unique @map("invoice_number")
+  userId         String        @map("user_id")
+  subscriptionId String?       @map("subscription_id")
+  courseId        String?       @map("course_id")
+  branchId        String?       @map("branch_id")
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String        @default("GBP")
+  taxAmount       Decimal       @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  discountAmount  Decimal       @default(0) @map("discount_amount") @db.Decimal(10, 2)
+  totalAmount     Decimal       @map("total_amount") @db.Decimal(10, 2)
+  status          InvoiceStatus @default(PENDING)
+  dueDate         DateTime?     @map("due_date")
+  paidAt          DateTime?     @map("paid_at")
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  user         User              @relation(fields: [userId], references: [id])
+  subscription UserSubscription? @relation(fields: [subscriptionId], references: [id])
+  course       Course?           @relation(fields: [courseId], references: [id])
+  branch       Branch?           @relation(fields: [branchId], references: [id])
+  payments     Payment[]
+
+  @@index([userId])
+  @@map("invoices")
+}
+
+/// A payment transaction against an invoice.
+model Payment {
+  id              String        @id @default(uuid())
+  invoiceId       String        @map("invoice_id")
+  userId          String        @map("user_id")
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String
+  paymentMethod   String?       @map("payment_method")
+  paymentGateway  String        @map("payment_gateway")
+  gatewayTxnId    String?       @map("gateway_txn_id")
+  gatewayResponse Json?         @map("gateway_response")
+  status          PaymentStatus
+  paidAt          DateTime?     @map("paid_at")
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([invoiceId])
+  @@map("payments")
+}
+
+/// Reusable discount / promo code.
+model DiscountCode {
+  id            String       @id @default(uuid())
+  code          String       @unique
+  description   String?
+  discountType  DiscountType @map("discount_type")
+  discountValue Decimal      @map("discount_value") @db.Decimal(10, 2)
+  currency      String?
+  maxUses       Int?         @map("max_uses")
+  timesUsed     Int          @default(0) @map("times_used")
+  validFrom     DateTime?    @map("valid_from")
+  validUntil    DateTime?    @map("valid_until")
+  isActive      Boolean      @default(true) @map("is_active")
+
+  @@map("discount_codes")
+}
+
+// ============================================================
+// DOMAIN 7: COMMUNICATION
+// ============================================================
+
+/// In-app notification sent to a user.
+model Notification {
+  id               String           @id @default(uuid())
+  userId           String           @map("user_id")
+  title            String
+  body             String?
+  notificationType NotificationType @map("notification_type")
+  referenceType    String?          @map("reference_type")
+  referenceId      String?          @map("reference_id")
+  isRead           Boolean          @default(false) @map("is_read")
+  readAt           DateTime?        @map("read_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead, createdAt])
+  @@map("notifications")
+}
+
+/// A messaging conversation (direct, group, or course-scoped).
+model Conversation {
+  id               String           @id @default(uuid())
+  title            String?
+  conversationType ConversationType @default(DIRECT) @map("conversation_type")
+  courseId          String?          @map("course_id")
+  createdById      String           @map("created_by_id")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  course       Course?                     @relation(fields: [courseId], references: [id])
+  createdBy    User                        @relation(fields: [createdById], references: [id])
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+/// A user participating in a conversation.
+model ConversationParticipant {
+  conversationId String    @map("conversation_id")
+  userId         String    @map("user_id")
+  joinedAt       DateTime  @default(now()) @map("joined_at")
+  lastReadAt     DateTime? @map("last_read_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@id([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+/// An individual message within a conversation.
+model Message {
+  id             String   @id @default(uuid())
+  conversationId String   @map("conversation_id")
+  senderId       String   @map("sender_id")
+  body           String
+  attachmentUrl  String?  @map("attachment_url")
+  isRead         Boolean  @default(false) @map("is_read")
+  readAt         DateTime? @map("read_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  sender       User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+/// Log of outbound emails sent by the system.
+model EmailLog {
+  id             String      @id @default(uuid())
+  recipientEmail String      @map("recipient_email")
+  recipientId    String?     @map("recipient_id")
+  subject        String
+  bodyHtml       String?     @map("body_html")
+  templateName   String?     @map("template_name")
+  status         EmailStatus
+  provider       String?
+  providerMsgId  String?     @map("provider_msg_id")
+  errorMessage   String?     @map("error_message")
+  sentAt         DateTime?   @map("sent_at")
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  recipient User? @relation(fields: [recipientId], references: [id])
+
+  @@map("email_logs")
+}
+
+// ============================================================
+// DOMAIN 8: ANALYTICS
+// ============================================================
+
+/// Periodic snapshot of a student's progress within a course.
+model StudentProgressSnapshot {
+  id               String   @id @default(uuid())
+  studentId        String   @map("student_id")
+  courseId          String   @map("course_id")
+  snapshotDate     DateTime @map("snapshot_date")
+  lessonsCompleted Int      @default(0) @map("lessons_completed")
+  totalLessons     Int      @default(0) @map("total_lessons")
+  assignmentsAvg   Decimal? @map("assignments_avg") @db.Decimal(5, 2)
+  quizzesAvg       Decimal? @map("quizzes_avg") @db.Decimal(5, 2)
+  attendancePct    Decimal? @map("attendance_pct") @db.Decimal(5, 2)
+  overallGrade     String?  @map("overall_grade")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  student User   @relation(fields: [studentId], references: [id])
+  course  Course @relation(fields: [courseId], references: [id])
+
+  @@unique([studentId, courseId, snapshotDate])
+  @@index([studentId, courseId])
+  @@map("student_progress_snapshots")
+}
+
+/// Aggregated performance metrics for a tutor over a time period.
+model TutorPerformance {
+  id               String   @id @default(uuid())
+  tutorId          String   @map("tutor_id")
+  periodStart      DateTime @map("period_start")
+  periodEnd        DateTime @map("period_end")
+  classesHeld      Int      @default(0) @map("classes_held")
+  classesCancelled Int      @default(0) @map("classes_cancelled")
+  avgAttendancePct Decimal? @map("avg_attendance_pct") @db.Decimal(5, 2)
+  avgStudentRating Decimal? @map("avg_student_rating") @db.Decimal(3, 2)
+  totalStudents    Int      @default(0) @map("total_students")
+  totalHours       Decimal  @default(0) @map("total_hours") @db.Decimal(7, 2)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  tutor User @relation(fields: [tutorId], references: [id])
+
+  @@unique([tutorId, periodStart, periodEnd])
+  @@map("tutor_performance")
+}
+
+/// Raw user engagement event for analytics.
+model EngagementEvent {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  eventType     String   @map("event_type")
+  referenceType String?  @map("reference_type")
+  referenceId   String?  @map("reference_id")
+  metadata      Json?
+  ipAddress     String?  @map("ip_address")
+  userAgent     String?  @map("user_agent")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, eventType, createdAt])
+  @@map("engagement_events")
+}
+
+/// A student's review and rating of a tutor.
+model TutorReview {
+  id         String   @id @default(uuid())
+  tutorId    String   @map("tutor_id")
+  studentId  String   @map("student_id")
+  courseId    String?  @map("course_id")
+  rating     Int
+  reviewText String?  @map("review_text")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tutor   User    @relation("ReviewTutor", fields: [tutorId], references: [id])
+  student User    @relation("ReviewStudent", fields: [studentId], references: [id])
+  course  Course? @relation(fields: [courseId], references: [id])
+
+  @@unique([tutorId, studentId, courseId])
+  @@map("tutor_reviews")
+}
+
+// ============================================================
+// DOMAIN 9: SYSTEM
+// ============================================================
+
+/// Immutable audit trail of user actions.
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?  @map("user_id")
+  action     String
+  entityType String?  @map("entity_type")
+  entityId   String?  @map("entity_id")
+  oldValues  Json?    @map("old_values")
+  newValues  Json?    @map("new_values")
+  ipAddress  String?  @map("ip_address")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
+
+/// Key-value configuration settings, optionally scoped to a branch.
+model SystemSetting {
+  id           Int     @id @default(autoincrement())
+  branchId     String? @map("branch_id")
+  settingKey   String  @map("setting_key")
+  settingValue String? @map("setting_value")
+  valueType    String  @default("STRING") @map("value_type")
+
+  branch Branch? @relation(fields: [branchId], references: [id])
+
+  @@unique([branchId, settingKey])
+  @@map("system_settings")
+}

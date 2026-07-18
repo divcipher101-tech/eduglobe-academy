@@ -1,0 +1,62 @@
+{
+  "name": "eduglobe-academy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^1",
+    "@auth/prisma-adapter": "^2",
+    "@prisma/client": "^6",
+    "@react-email/components": "^0",
+    "@react-pdf/renderer": "^4",
+    "@stripe/stripe-js": "^5",
+    "@uploadthing/react": "^7",
+    "ai": "^4",
+    "bcryptjs": "^3",
+    "date-fns": "^4",
+    "lucide-react": "^0",
+    "next": "16.2.10",
+    "next-auth": "beta",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "recharts": "^2",
+    "resend": "^4",
+    "slugify": "^1",
+    "socket.io": "^4",
+    "socket.io-client": "^4",
+    "stripe": "^17",
+    "uploadthing": "^7",
+    "uuid": "^11",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/uuid": "^10",
+    "autoprefixer": "^10.5.4",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "postcss": "^8.5.19",
+    "prisma": "^6",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4",
+    "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}
