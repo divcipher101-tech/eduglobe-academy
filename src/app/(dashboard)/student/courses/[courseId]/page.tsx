@@ -7,7 +7,7 @@ export default async function CourseSyllabusPage({ params }: { params: Promise<{
   const unwrappedParams = await params;
 
   // Mock course data
-  const course = {
+  const course: any = {
     id: unwrappedParams.courseId,
     title: "IGCSE Additional Mathematics (0606)",
     description: "Master the fundamentals of Additional Mathematics with comprehensive video lessons, interactive quizzes, and AI-powered tutoring support tailored for the Cambridge IGCSE syllabus.",
