@@ -9,25 +9,25 @@ const mockQuiz = {
   id: "quiz-1",
   title: "Mid-Term Assessment: Algebraic Fractions",
   course: "IGCSE Mathematics",
-  timeLimit: 45 * 60, // 45 mins in seconds
+  timeLimit: 5 * 60, // 5 mins in seconds
   questions: [
     {
       id: 1,
       text: "Which of the following is equivalent to (2x + 4) / 2?",
-      options: ["x + 4", "x + 2", "2x + 2", "x"],
-      correctAnswer: 1,
+      options: ["x", "x + 4", "2x + 2", "x + 2"],
+      correctAnswer: 3,
     },
     {
       id: 2,
       text: "Simplify: (x² - 9) / (x - 3)",
-      options: ["x - 3", "x + 3", "x² - 3", "x - 9"],
-      correctAnswer: 1,
+      options: ["x + 3", "x - 3", "x² - 3", "x - 9"],
+      correctAnswer: 0,
     },
     {
       id: 3,
       text: "Solve for x: 3/x = 6/10",
-      options: ["3", "5", "10", "15"],
-      correctAnswer: 1,
+      options: ["3", "10", "5", "15"],
+      correctAnswer: 2,
     },
   ]
 };
@@ -207,8 +207,7 @@ export default function QuizTakingInterface({ params }: { params: { quizId: stri
         {currentQuestionIndex === mockQuiz.questions.length - 1 ? (
           <button
             onClick={handleSubmit}
-            disabled={answeredCount < mockQuiz.questions.length}
-            className="px-8 py-3 bg-success-600 hover:bg-success-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-success-600/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-8 py-3 bg-success-600 hover:bg-success-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-success-600/20 flex items-center gap-2"
           >
             <CheckCircle2 className="w-5 h-5" /> Submit Quiz
           </button>
@@ -226,7 +225,7 @@ export default function QuizTakingInterface({ params }: { params: { quizId: stri
       {currentQuestionIndex === mockQuiz.questions.length - 1 && answeredCount < mockQuiz.questions.length && (
         <div className="absolute bottom-32 left-1/2 -translate-x-1/2 bg-warning-50 border border-warning-200 text-warning-800 px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-fade-in-up">
           <AlertCircle className="w-5 h-5 text-warning-600" />
-          <span className="font-bold text-sm">You must answer all questions before submitting.</span>
+          <span className="font-bold text-sm">You have unanswered questions. You may still submit.</span>
         </div>
       )}
     </div>
