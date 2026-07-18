@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Mail, Lock, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isRegistered = searchParams.get("registered") === "true";
@@ -42,9 +42,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-text-primary mb-6 text-center">Welcome back</h2>
-      
+    <>
       {isRegistered && (
         <div className="mb-4 p-3 bg-secondary-50 border border-secondary-200 text-secondary-700 rounded-lg text-sm flex items-start gap-2">
           <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
@@ -109,6 +107,18 @@ export default function LoginPage() {
           )}
         </button>
       </form>
+    </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-text-primary mb-6 text-center">Welcome back</h2>
+      
+      <Suspense fallback={<div className="flex justify-center p-4"><Loader2 className="w-6 h-6 animate-spin text-primary-600" /></div>}>
+        <LoginForm />
+      </Suspense>
 
       <div className="mt-6 text-center text-sm text-text-secondary">
         Don't have an account?{" "}

@@ -96,14 +96,14 @@ export default async function CourseSyllabusPage({ params }: { params: Promise<{
         <h2 className="text-2xl font-bold text-text-primary">Course Syllabus</h2>
         
         <div className="space-y-4">
-          {course.modules.map((module, mIdx) => (
+          {course.modules.map((module: any, mIdx: number) => (
             <div key={module.id} className="card p-0 overflow-hidden border border-glass-border">
               <div className="bg-bg-tertiary p-4 md:px-6 border-b border-glass-border flex justify-between items-center">
                 <h3 className="font-bold text-lg text-text-primary">{module.title}</h3>
                 <span className="text-sm text-text-secondary">{module.lessons.length} lessons</span>
               </div>
               <div className="divide-y divide-glass-border">
-                {module.lessons.map((lesson, lIdx) => (
+                {module.lessons.map((lesson: any, lIdx: number) => (
                   <div key={lesson.id} className={`p-4 md:px-6 flex items-center justify-between transition-colors ${lesson.locked ? 'bg-bg-secondary/50 opacity-75' : 'hover:bg-bg-secondary'}`}>
                     <div className="flex items-center gap-4">
                       {lesson.completed ? (
