@@ -6,10 +6,14 @@ import { z } from "zod";
 // Input validation schema
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, "Password must contain at least one number or special character"),
   firstName: z.string().min(2, "First name is required"),
   lastName: z.string().min(2, "Last name is required"),
-  role: z.enum(["STUDENT", "TUTOR", "PARENT"]),
+  role: z.enum(["STUDENT", "TUTOR", "PARENT"]), // ADMIN is strictly excluded here
   secretCode: z.string().optional(),
   specializations: z.array(z.string()).optional(),
 });

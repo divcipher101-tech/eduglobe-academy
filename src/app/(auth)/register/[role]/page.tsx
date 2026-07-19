@@ -88,6 +88,26 @@ export default function RoleRegistrationForm({
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const calculatePasswordStrength = (pwd: string) => {
+    let score = 0;
+    if (!pwd) return 0;
+    if (pwd.length >= 8) score += 25;
+    if (/[A-Z]/.test(pwd)) score += 25;
+    if (/[a-z]/.test(pwd)) score += 25;
+    if (/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(pwd)) score += 25;
+    return score;
+  };
+
+  const passwordStrength = calculatePasswordStrength(formData.password);
+
+  const getStrengthColor = (score: number) => {
+    if (score === 0) return "bg-glass-border";
+    if (score <= 25) return "bg-danger-500";
+    if (score <= 50) return "bg-warning-500";
+    if (score <= 75) return "bg-accent-500";
+    return "bg-success-500";
+  };
+
   // Fetch subjects if it's a tutor
   useEffect(() => {
     if (isTutor) {
@@ -116,6 +136,18 @@ export default function RoleRegistrationForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (passwordStrength < 100) {
+      setError("Password must be at least 8 characters and include uppercase, lowercase, and a number/special character.");
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
@@ -347,6 +379,20 @@ export default function RoleRegistrationForm({
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {/* Password Strength Meter */}
+              {formData.password && (
+                <div className="pt-2 animate-fade-in-up">
+                  <div className="flex gap-1 h-1.5 w-full rounded-full overflow-hidden">
+                    <div className={`flex-1 transition-colors duration-300 ${passwordStrength >= 25 ? getStrengthColor(passwordStrength) : 'bg-glass-border'}`}></div>
+                    <div className={`flex-1 transition-colors duration-300 ${passwordStrength >= 50 ? getStrengthColor(passwordStrength) : 'bg-glass-border'}`}></div>
+                    <div className={`flex-1 transition-colors duration-300 ${passwordStrength >= 75 ? getStrengthColor(passwordStrength) : 'bg-glass-border'}`}></div>
+                    <div className={`flex-1 transition-colors duration-300 ${passwordStrength >= 100 ? getStrengthColor(passwordStrength) : 'bg-glass-border'}`}></div>
+                  </div>
+                  <p className="text-xs text-text-tertiary mt-1">
+                    {passwordStrength < 100 ? "Use 8+ characters, mixing uppercase, lowercase & numbers." : "Strong password!"}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -381,7 +427,7 @@ export default function RoleRegistrationForm({
                 </label>
                 
                 {/* Custom Multi-Select Dropdown */}
-                <div className="relative">
+                <div className={`relative ${isSubjectsDropdownOpen ? 'z-50' : ''}`}>
                   <div 
                     onClick={() => setIsSubjectsDropdownOpen(!isSubjectsDropdownOpen)}
                     className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl cursor-pointer flex flex-wrap gap-2 min-h-[58px] transition-all ${isSubjectsDropdownOpen ? 'ring-4 ring-accent-500/10 border-accent-500' : ''}`}
