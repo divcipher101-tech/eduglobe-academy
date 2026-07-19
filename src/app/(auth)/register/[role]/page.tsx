@@ -258,13 +258,22 @@ export default function RoleRegistrationForm({
                   <input
                     id="secretCode"
                     name="secretCode"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={formData.secretCode}
                     onChange={handleChange}
-                    className={`w-full pl-11 pr-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
+                    className={`w-full pl-11 pr-12 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${theme.inputFocus}`}
                     placeholder="Enter your secret code..."
                     required
+                    autoComplete="new-password"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className={`absolute inset-y-0 right-0 pr-4 flex items-center transition-colors text-text-tertiary ${theme.iconHover}`}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
                 </div>
                 <p className="text-xs text-text-tertiary ml-1 mt-1">
                   This code is provided by EduGlobe administration to authorize your {roleKey} account.
@@ -354,6 +363,14 @@ export default function RoleRegistrationForm({
                   required
                   minLength={8}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute inset-y-0 right-0 pr-4 flex items-center transition-colors text-text-tertiary ${theme.iconHover}`}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
             </div>
 
