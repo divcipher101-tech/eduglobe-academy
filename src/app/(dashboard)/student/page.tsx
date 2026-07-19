@@ -116,28 +116,34 @@ export default async function StudentDashboard() {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* If they had real enrollments, we would map them here. Since we're still building, we show mock data if enrollments > 0 */}
-              <Link href="/student/courses/crs-101" className="block card p-0 overflow-hidden flex flex-col sm:flex-row group cursor-pointer hover:shadow-lg transition-all border border-glass-border hover:border-primary-300">
-                <div className="w-full sm:w-48 h-32 bg-bg-tertiary relative flex shrink-0 items-center justify-center">
-                   <PlayCircle className="w-12 h-12 text-text-tertiary group-hover:text-primary-500 transition-colors z-10" />
-                </div>
-                <div className="p-6 flex-1 flex flex-col justify-center">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-1 rounded-md uppercase tracking-wider">IGCSE Mathematics</span>
+              {userData?.courseEnrollments?.map((enrollment) => (
+                <Link key={enrollment.id} href={`/student/courses/${enrollment.courseId}`} className="block card p-0 overflow-hidden flex flex-col sm:flex-row group cursor-pointer hover:shadow-lg transition-all border border-glass-border hover:border-primary-300">
+                  <div className="w-full sm:w-48 h-32 bg-bg-tertiary relative flex shrink-0 items-center justify-center">
+                    {enrollment.course.thumbnailUrl ? (
+                      <img src={enrollment.course.thumbnailUrl} alt={enrollment.course.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <PlayCircle className="w-12 h-12 text-text-tertiary group-hover:text-primary-500 transition-colors z-10" />
+                    )}
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                   </div>
-                  <h3 className="text-lg font-bold text-text-primary mb-2 group-hover:text-primary-600 transition-colors">Algebraic Fractions</h3>
-                  
-                  <div className="mt-auto">
-                    <div className="flex justify-between text-xs text-text-secondary font-medium mb-1.5">
-                      <span>Progress</span>
-                      <span>65%</span>
+                  <div className="p-6 flex-1 flex flex-col justify-center">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-1 rounded-md uppercase tracking-wider">{enrollment.course.subjectId ? "Course" : "Subject"}</span>
                     </div>
-                    <div className="w-full bg-bg-tertiary rounded-full h-2">
-                      <div className="bg-primary-500 h-2 rounded-full transition-all" style={{ width: "65%" }}></div>
+                    <h3 className="text-lg font-bold text-text-primary mb-2 group-hover:text-primary-600 transition-colors">{enrollment.course.title}</h3>
+                    
+                    <div className="mt-auto">
+                      <div className="flex justify-between text-xs text-text-secondary font-medium mb-1.5">
+                        <span>Progress</span>
+                        <span>{Number(enrollment.progressPct) || 0}%</span>
+                      </div>
+                      <div className="w-full bg-bg-tertiary rounded-full h-2">
+                        <div className="bg-primary-500 h-2 rounded-full transition-all" style={{ width: `${Number(enrollment.progressPct) || 0}%` }}></div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              ))}
             </div>
           )}
         </div>

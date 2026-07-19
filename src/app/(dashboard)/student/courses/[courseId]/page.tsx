@@ -1,72 +1,79 @@
 import { BookOpen, Clock, PlayCircle, Lock, Award, FileText, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 
 export default async function CourseSyllabusPage({ params }: { params: Promise<{ courseId: string }> }) {
   const session = await auth();
+  
+  if (!session || !session.user) {
+    redirect("/login");
+  }
+
   const unwrappedParams = await params;
 
-  // Mock course data
-  const course: any = {
-    id: unwrappedParams.courseId,
-    title: "IGCSE Additional Mathematics (0606)",
-    description: "Master the fundamentals of Additional Mathematics with comprehensive video lessons, interactive quizzes, and AI-powered tutoring support tailored for the Cambridge IGCSE syllabus.",
-    instructor: "Dr. Alan Smith",
-    progress: 12,
-    modules: [
-      {
-        id: "m1",
-        title: "Module 1: Functions",
-        lessons: [
-          { id: "l1", title: "Introduction to Functions & Mappings", duration: "14:20", type: "video", completed: true },
-          { id: "l2", title: "Composite Functions", duration: "22:15", type: "video", completed: true },
-          { id: "l3", title: "Inverse Functions", duration: "18:45", type: "video", completed: false },
-          { id: "l4", title: "Functions Assignment", duration: "45:00", type: "quiz", completed: false },
-        ]
+  // Fetch course data from DB
+  const course = await prisma.course.findUnique({
+    where: { id: unwrappedParams.courseId },
+    include: {
+      tutor: true,
+      subject: true,
+      modules: {
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          lessons: {
+            orderBy: { sortOrder: 'asc' }
+          }
+        }
       },
-      {
-        id: "m2",
-        title: "Module 2: Quadratic Functions",
-        lessons: [
-          { id: "l5", title: "Completing the Square", duration: "25:10", type: "video", completed: false },
-          { id: "l6", title: "Maximum and Minimum Values", duration: "19:30", type: "video", completed: false },
-          { id: "l7", title: "Quadratic Inequalities", duration: "21:00", type: "video", completed: false },
-        ]
-      },
-      {
-        id: "m3",
-        title: "Module 3: Equations, Inequalities and Graphs",
-        lessons: [
-          { id: "l8", title: "Solving Simultaneous Equations", duration: "28:15", type: "video", completed: false, locked: true },
-          { id: "l9", title: "Modulus Functions", duration: "24:40", type: "video", completed: false, locked: true },
-        ]
+      enrollments: {
+        where: { studentId: session.user.id }
       }
-    ]
-  };
+    }
+  });
+
+  if (!course) {
+    return <div className="p-8 text-center text-text-secondary">Course not found.</div>;
+  }
+
+  const enrollment = course.enrollments[0];
+  const progressPct = enrollment ? enrollment.progressPct : 0;
+  
+  // Format tutor name
+  const tutorName = course.tutor ? `${course.tutor.firstName} ${course.tutor.lastName}` : "Unknown Instructor";
+
+  // Calculate total lessons
+  const totalLessons = course.modules.reduce((acc, mod) => acc + mod.lessons.length, 0);
+
+  // Determine the first lesson ID for the "Continue Learning" button
+  let nextLessonId = course.modules[0]?.lessons[0]?.id || "";
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in-up pb-20">
       {/* Course Header */}
-      <div className="bg-gradient-to-br from-primary-600 to-accent-600 rounded-2xl p-8 text-white shadow-lg">
-        <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
+      <div className="bg-gradient-to-br from-primary-600 to-accent-600 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[150%] bg-white/10 blur-3xl transform rotate-12 pointer-events-none"></div>
+        
+        <div className="flex flex-col md:flex-row gap-8 items-start md:items-center relative z-10">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-4 text-primary-100 text-sm font-medium">
-              <span className="bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Mathematics</span>
-              <span className="bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">IGCSE</span>
+              {course.subject && <span className="bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">{course.subject.name}</span>}
             </div>
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">{course.title}</h1>
-            <p className="text-primary-100 mb-6 leading-relaxed max-w-3xl">
+            <p className="text-primary-100 mb-6 leading-relaxed max-w-3xl whitespace-pre-wrap">
               {course.description}
             </p>
             <div className="flex flex-wrap items-center gap-6 text-sm font-medium">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                   {course.instructor.charAt(0)}
+                   {tutorName.charAt(0)}
                 </div>
-                {course.instructor}
+                {tutorName}
               </div>
               <div className="flex items-center gap-2 text-primary-100">
-                <BookOpen className="w-4 h-4" /> 3 Modules
+                <BookOpen className="w-4 h-4" /> {course.modules.length} Modules
               </div>
               <div className="flex items-center gap-2 text-primary-100">
                 <Award className="w-4 h-4" /> Certificate of Completion
@@ -76,17 +83,32 @@ export default async function CourseSyllabusPage({ params }: { params: Promise<{
 
           {/* Progress Card */}
           <div className="bg-white rounded-xl p-6 text-text-primary shadow-xl w-full md:w-72 shrink-0">
-            <h3 className="font-bold text-lg mb-2">Your Progress</h3>
-            <div className="flex justify-between items-end mb-2">
-              <span className="text-3xl font-display font-bold text-primary-600">{course.progress}%</span>
-              <span className="text-sm text-text-secondary mb-1">Completed</span>
-            </div>
-            <div className="w-full bg-bg-tertiary rounded-full h-2 mb-6">
-              <div className="bg-primary-500 h-2 rounded-full" style={{ width: `${course.progress}%` }}></div>
-            </div>
-            <Link href={`/student/courses/${course.id}/lessons/${course.modules[0].lessons[2].id}`} className="btn btn-primary w-full">
-              Continue Learning
-            </Link>
+            {enrollment ? (
+              <>
+                <h3 className="font-bold text-lg mb-2">Your Progress</h3>
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-3xl font-display font-bold text-primary-600">{Number(progressPct)}%</span>
+                  <span className="text-sm text-text-secondary mb-1">Completed</span>
+                </div>
+                <div className="w-full bg-bg-tertiary rounded-full h-2 mb-6">
+                  <div className="bg-primary-500 h-2 rounded-full transition-all" style={{ width: `${Number(progressPct)}%` }}></div>
+                </div>
+                {nextLessonId ? (
+                  <Link href={`/student/courses/${course.id}/lessons/${nextLessonId}`} className="btn btn-primary w-full">
+                    {Number(progressPct) > 0 ? "Continue Learning" : "Start Course"}
+                  </Link>
+                ) : (
+                  <button disabled className="btn w-full bg-bg-tertiary text-text-tertiary">No lessons available</button>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-4">
+                 <Lock className="w-10 h-10 text-text-tertiary mx-auto mb-3" />
+                 <h3 className="font-bold text-lg mb-2">Not Enrolled</h3>
+                 <p className="text-sm text-text-secondary mb-4">You are not currently enrolled in this course.</p>
+                 <button className="btn btn-primary w-full shadow-lg hover:shadow-primary-500/25">Enroll Now</button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -95,49 +117,62 @@ export default async function CourseSyllabusPage({ params }: { params: Promise<{
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-text-primary">Course Syllabus</h2>
         
-        <div className="space-y-4">
-          {course.modules.map((module: any, mIdx: number) => (
-            <div key={module.id} className="card p-0 overflow-hidden border border-glass-border">
-              <div className="bg-bg-tertiary p-4 md:px-6 border-b border-glass-border flex justify-between items-center">
-                <h3 className="font-bold text-lg text-text-primary">{module.title}</h3>
-                <span className="text-sm text-text-secondary">{module.lessons.length} lessons</span>
-              </div>
-              <div className="divide-y divide-glass-border">
-                {module.lessons.map((lesson: any, lIdx: number) => (
-                  <div key={lesson.id} className={`p-4 md:px-6 flex items-center justify-between transition-colors ${lesson.locked ? 'bg-bg-secondary/50 opacity-75' : 'hover:bg-bg-secondary'}`}>
-                    <div className="flex items-center gap-4">
-                      {lesson.completed ? (
-                        <CheckCircle2 className="w-6 h-6 text-secondary-500 shrink-0" />
-                      ) : lesson.locked ? (
-                        <Lock className="w-6 h-6 text-text-tertiary shrink-0" />
-                      ) : lesson.type === 'video' ? (
-                        <PlayCircle className="w-6 h-6 text-primary-400 shrink-0" />
-                      ) : (
-                        <FileText className="w-6 h-6 text-accent-400 shrink-0" />
-                      )}
-                      
-                      <div>
-                        <h4 className={`font-medium ${lesson.locked ? 'text-text-secondary' : 'text-text-primary'}`}>
-                          {mIdx + 1}.{lIdx + 1} {lesson.title}
-                        </h4>
-                        <p className="text-xs text-text-tertiary mt-1 flex items-center gap-1">
-                          {lesson.type === 'video' ? <PlayCircle className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
-                          {lesson.type === 'video' ? 'Video' : 'Assignment'} • {lesson.duration}
-                        </p>
-                      </div>
-                    </div>
+        {course.modules.length === 0 ? (
+           <div className="card p-12 text-center text-text-secondary border border-dashed border-glass-border">
+             No modules have been added to this course yet.
+           </div>
+        ) : (
+          <div className="space-y-4">
+            {course.modules.map((module, mIdx) => (
+              <div key={module.id} className="card p-0 overflow-hidden border border-glass-border">
+                <div className="bg-bg-tertiary p-4 md:px-6 border-b border-glass-border flex justify-between items-center">
+                  <h3 className="font-bold text-lg text-text-primary">{module.title}</h3>
+                  <span className="text-sm text-text-secondary">{module.lessons.length} lessons</span>
+                </div>
+                <div className="divide-y divide-glass-border">
+                  {module.lessons.map((lesson, lIdx) => {
+                    // Placeholder logic: assume first module first lesson is unlocked, others locked if no progress
+                    // We can refine this later with real progress tracking records
+                    const isCompleted = false; 
+                    const isLocked = !enrollment; // For now, if not enrolled, it's locked.
+                    
+                    return (
+                      <div key={lesson.id} className={`p-4 md:px-6 flex items-center justify-between transition-colors ${isLocked ? 'bg-bg-secondary/50 opacity-75' : 'hover:bg-bg-secondary'}`}>
+                        <div className="flex items-center gap-4">
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-6 h-6 text-secondary-500 shrink-0" />
+                          ) : isLocked ? (
+                            <Lock className="w-6 h-6 text-text-tertiary shrink-0" />
+                          ) : lesson.contentType === 'VIDEO' ? (
+                            <PlayCircle className="w-6 h-6 text-primary-400 shrink-0" />
+                          ) : (
+                            <FileText className="w-6 h-6 text-accent-400 shrink-0" />
+                          )}
+                          
+                          <div>
+                            <h4 className={`font-medium ${isLocked ? 'text-text-secondary' : 'text-text-primary'}`}>
+                              {mIdx + 1}.{lIdx + 1} {lesson.title}
+                            </h4>
+                            <p className="text-xs text-text-tertiary mt-1 flex items-center gap-1">
+                              {lesson.contentType === 'VIDEO' ? <PlayCircle className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
+                              {lesson.contentType === 'VIDEO' ? 'Video' : 'Document'} • {lesson.durationMinutes || 0} mins
+                            </p>
+                          </div>
+                        </div>
 
-                    {!lesson.locked && (
-                      <Link href={`/student/courses/${course.id}/lessons/${lesson.id}`} className="btn btn-ghost btn-sm">
-                        {lesson.completed ? 'Review' : 'Start'}
-                      </Link>
-                    )}
-                  </div>
-                ))}
+                        {!isLocked && (
+                          <Link href={`/student/courses/${course.id}/lessons/${lesson.id}`} className="btn btn-ghost btn-sm">
+                            {isCompleted ? 'Review' : 'Start'}
+                          </Link>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -52,7 +52,7 @@ export default function CourseCatalogClient({ initialCourses }: { initialCourses
   return (
     <>
       {/* Header Section */}
-      <div className="relative py-20 overflow-hidden bg-primary-950">
+      <div className="relative pt-36 pb-20 overflow-hidden bg-primary-950">
         <div className="absolute inset-0 bg-black/5 opacity-20 mix-blend-overlay"></div>
         <div 
           className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-5xl opacity-40 blur-3xl -z-10"
