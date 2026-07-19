@@ -1,12 +1,12 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { Users, GraduationCap, TrendingUp, AlertCircle, Calendar, ChevronRight, BookOpen } from "lucide-react";
+import { Users, GraduationCap, TrendingUp, AlertCircle, Calendar, ChevronRight, BookOpen, Clock, FileText, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 export default async function ParentDashboard() {
   const session = await auth();
-  if (!session || !session.user) redirect("/login");
+  if (!session || !session.user || session.user.role !== "PARENT") redirect("/login");
 
   // Fetch children
   const parentLinks = await prisma.parentStudentLink.findMany({
@@ -27,6 +27,13 @@ export default async function ParentDashboard() {
   const totalChildren = children.length;
   const activeCourses = children.reduce((acc, child) => acc + child.courseEnrollments.length, 0);
   
+  // Mock recent grades for display
+  const recentGrades = [
+    { subject: "A-Level Physics", grade: "A*", date: "2 days ago" },
+    { subject: "IGCSE Mathematics", grade: "A", date: "1 week ago" },
+    { subject: "Secondary English", grade: "B+", date: "2 weeks ago" },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in-up">
       {/* Header */}
@@ -42,8 +49,8 @@ export default async function ParentDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-glass-border shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+        <div className="bg-white p-6 rounded-2xl border border-glass-border shadow-sm flex items-center gap-4 group hover:border-primary-300 transition-colors">
+          <div className="w-12 h-12 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
             <Users className="w-6 h-6" />
           </div>
           <div>
@@ -51,8 +58,8 @@ export default async function ParentDashboard() {
             <h3 className="text-2xl font-bold text-text-primary">{totalChildren}</h3>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-glass-border shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-success-50 text-success-600 flex items-center justify-center shrink-0">
+        <div className="bg-white p-6 rounded-2xl border border-glass-border shadow-sm flex items-center gap-4 group hover:border-success-300 transition-colors">
+          <div className="w-12 h-12 rounded-full bg-success-50 text-success-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
             <GraduationCap className="w-6 h-6" />
           </div>
           <div>
@@ -60,8 +67,8 @@ export default async function ParentDashboard() {
             <h3 className="text-2xl font-bold text-text-primary">{activeCourses}</h3>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-glass-border shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-warning-50 text-warning-600 flex items-center justify-center shrink-0">
+        <div className="bg-white p-6 rounded-2xl border border-glass-border shadow-sm flex items-center gap-4 group hover:border-warning-300 transition-colors">
+          <div className="w-12 h-12 rounded-full bg-warning-50 text-warning-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
@@ -87,98 +94,79 @@ export default async function ParentDashboard() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-8">
           {children.map(child => (
-            <div key={child.id} className="bg-white rounded-2xl border border-glass-border shadow-sm overflow-hidden flex flex-col group hover:border-primary-300 transition-all">
-              <div className="p-6 border-b border-glass-border flex items-center gap-4 bg-bg-secondary/50">
-                <div className="w-14 h-14 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-xl border-2 border-white shadow-sm">
-                  {child.firstName[0]}{child.lastName[0]}
+            <div key={child.id} className="bg-white rounded-3xl border border-glass-border shadow-sm overflow-hidden flex flex-col group hover:border-primary-300 transition-all">
+              {/* Child Header Card */}
+              <div className="p-8 border-b border-glass-border flex flex-col md:flex-row md:items-center justify-between gap-6 bg-bg-secondary/30">
+                <div className="flex items-center gap-5">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 text-white flex items-center justify-center font-display font-bold text-3xl shadow-lg shadow-primary-500/20">
+                    {child.firstName[0]}{child.lastName[0]}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-display font-bold text-text-primary">{child.firstName} {child.lastName}</h3>
+                    <p className="text-sm font-medium text-primary-600 bg-primary-50 inline-flex px-3 py-1 rounded-full mt-2">Student ID: {child.id.substring(0, 8)}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-text-primary">{child.firstName} {child.lastName}</h3>
-                  <p className="text-sm text-text-secondary">Student ID: {child.id.substring(0, 8)}</p>
+                <div className="flex gap-3">
+                  <button className="btn btn-secondary bg-white">View Full Report</button>
+                  <button className="btn btn-secondary bg-white text-primary-600 border-primary-200 hover:bg-primary-50">Message Tutors</button>
                 </div>
-                <Link href={`/parent/children`} className="ml-auto text-sm font-bold text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
-                  Details <ChevronRight className="w-4 h-4" />
-                </Link>
               </div>
-              <div className="p-6 flex-1">
-                <h4 className="text-sm font-bold text-text-tertiary uppercase tracking-wider mb-4">Enrolled Courses</h4>
-                {child.courseEnrollments.length > 0 ? (
-                  <div className="space-y-4">
-                    {child.courseEnrollments.map(enrollment => (
-                      <div key={enrollment.id} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
-                            <BookOpen className="w-5 h-5 text-indigo-600" />
+              
+              <div className="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Active Courses */}
+                <div className="lg:col-span-2 space-y-4">
+                  <h4 className="font-bold text-text-primary border-b border-glass-border pb-2">Active Courses & Progress</h4>
+                  {child.courseEnrollments.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {child.courseEnrollments.map(enrollment => (
+                        <div key={enrollment.id} className="p-4 rounded-xl border border-glass-border bg-bg-secondary/20 hover:bg-bg-secondary/50 transition-colors">
+                          <h5 className="font-bold text-text-primary mb-2 line-clamp-1">{enrollment.course.title}</h5>
+                          <div className="flex justify-between text-xs text-text-secondary font-medium mb-1.5">
+                            <span>Progress</span>
+                            <span>{Number(enrollment.progressPct) || 0}%</span>
                           </div>
-                          <div>
-                            <p className="font-medium text-text-primary text-sm">{enrollment.course.title}</p>
-                            <div className="w-full h-1.5 bg-bg-tertiary rounded-full mt-2 w-32">
-                              <div className="h-full bg-success-500 rounded-full" style={{ width: `${Number(enrollment.progressPct)}%` }}></div>
-                            </div>
+                          <div className="w-full bg-glass-border rounded-full h-2">
+                            <div className="bg-primary-500 h-2 rounded-full transition-all" style={{ width: `${Number(enrollment.progressPct) || 0}%` }}></div>
                           </div>
                         </div>
-                        <span className="text-sm font-bold text-success-600">{Number(enrollment.progressPct)}%</span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-4 rounded-xl border border-dashed border-glass-border text-center text-sm text-text-secondary">
+                      No active enrollments for this child.
+                    </div>
+                  )}
+                </div>
+
+                {/* Recent Grades */}
+                <div className="space-y-4">
+                  <h4 className="font-bold text-text-primary border-b border-glass-border pb-2">Recent Grades</h4>
+                  <div className="space-y-3">
+                    {recentGrades.map((grade, i) => (
+                      <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-glass-border bg-white hover:border-success-300 transition-colors group/grade">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-success-50 text-success-600 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-text-primary line-clamp-1">{grade.subject}</p>
+                            <p className="text-xs text-text-tertiary">{grade.date}</p>
+                          </div>
+                        </div>
+                        <div className="text-lg font-display font-bold text-success-600 bg-success-50 px-2 py-0.5 rounded-md">
+                          {grade.grade}
+                        </div>
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <p className="text-sm text-text-secondary italic">Not enrolled in any courses.</p>
-                )}
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
-
-      {/* Upcoming & Alerts (Mock Data for Enterprise Dashboard feel) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
-        <div className="bg-white rounded-2xl border border-glass-border shadow-sm p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <AlertCircle className="w-5 h-5 text-danger-500" />
-            <h3 className="text-lg font-bold text-text-primary">Recent Alerts</h3>
-          </div>
-          <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-danger-50 border border-danger-100 flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-danger-500 mt-2 shrink-0"></div>
-              <div>
-                <p className="text-sm font-bold text-danger-900">Missed Assignment</p>
-                <p className="text-sm text-danger-700 mt-1">David missed the deadline for "Algebraic Fractions Quiz" in IGCSE Mathematics.</p>
-              </div>
-            </div>
-            <div className="p-4 rounded-xl bg-warning-50 border border-warning-100 flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-warning-500 mt-2 shrink-0"></div>
-              <div>
-                <p className="text-sm font-bold text-warning-900">Low Attendance</p>
-                <p className="text-sm text-warning-700 mt-1">Sarah has missed 2 Live Classes this week.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-glass-border shadow-sm p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Calendar className="w-5 h-5 text-primary-500" />
-            <h3 className="text-lg font-bold text-text-primary">Upcoming Schedule</h3>
-          </div>
-          <div className="space-y-0">
-            {[1, 2, 3].map((_, i) => (
-              <div key={i} className="flex gap-4 p-4 border-b border-glass-border last:border-0 hover:bg-bg-secondary transition-colors">
-                <div className="text-center shrink-0 w-12">
-                  <p className="text-xs font-bold text-text-tertiary uppercase">Oct</p>
-                  <p className="text-xl font-bold text-text-primary">{24 + i}</p>
-                </div>
-                <div>
-                  <p className="font-bold text-text-primary">Physics Live Session</p>
-                  <p className="text-sm text-text-secondary mt-1">Sarah • 10:00 AM - 11:30 AM</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
     </div>
   );
 }

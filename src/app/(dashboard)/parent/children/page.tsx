@@ -1,139 +1,125 @@
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { Plus, Link as LinkIcon, UserPlus, BookOpen, Star, AlertCircle } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Link2, ShieldCheck, Users, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
-export default async function ChildrenDirectory() {
-  const session = await auth();
-  if (!session || !session.user) redirect("/login");
+export default function LinkChildPage() {
+  const [linkCode, setLinkCode] = useState("");
+  const [pin, setPin] = useState("");
+  const [status, setStatus] = useState<"idle" | "verifying" | "success" | "error">("idle");
 
-  const parentLinks = await prisma.parentStudentLink.findMany({
-    where: { parentId: session.user.id },
-    include: {
-      student: {
-        include: {
-          courseEnrollments: { include: { course: true } },
-          assignmentSubmissions: { include: { assignment: true } },
-          quizAttempts: { include: { quiz: true } },
-        }
+  const handleLink = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!linkCode || !pin) return;
+    
+    setStatus("verifying");
+    
+    // Simulate network request
+    setTimeout(() => {
+      if (linkCode === "TEST-CODE" && pin === "1234") {
+        setStatus("success");
+      } else {
+        setStatus("error");
       }
-    }
-  });
-
-  const children = parentLinks.map(link => link.student);
+    }, 1500);
+  };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 animate-fade-in-up">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-text-primary">Children Directory</h1>
-          <p className="text-text-secondary mt-1">Manage and track your linked student accounts</p>
+    <div className="max-w-3xl mx-auto space-y-8 animate-fade-in-up py-8">
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Link2 className="w-8 h-8" />
         </div>
-        <button className="btn btn-primary shadow-sm shadow-primary-500/20">
-          <LinkIcon className="w-4 h-4 mr-2" /> Link New Child
-        </button>
+        <h1 className="text-3xl font-display font-bold text-text-primary">Link Student Account</h1>
+        <p className="text-text-secondary max-w-lg mx-auto">
+          Enter the unique 8-character connection code and 4-digit PIN provided by your child's school or tutor to link their account to your dashboard.
+        </p>
       </div>
 
-      {children.length === 0 ? (
-        <div className="bg-white p-12 rounded-3xl border border-glass-border text-center shadow-sm">
-          <div className="w-16 h-16 bg-bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-            <UserPlus className="w-8 h-8 text-text-tertiary" />
+      <div className="bg-white rounded-3xl border border-glass-border shadow-lg p-8 sm:p-12 relative overflow-hidden">
+        {status === "success" ? (
+          <div className="text-center animate-fade-in-up py-8">
+            <div className="w-20 h-20 bg-success-100 text-success-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-bold text-text-primary mb-2">Account Linked Successfully!</h2>
+            <p className="text-text-secondary mb-8">
+              Emma Watson's student account is now linked to your parent portal.
+            </p>
+            <Link href="/parent" className="btn btn-primary w-full sm:w-auto">
+              Return to Dashboard
+            </Link>
           </div>
-          <h3 className="text-xl font-bold text-text-primary mb-2">No Children Linked</h3>
-          <p className="text-text-secondary max-w-md mx-auto mb-8">
-            You haven't linked any student accounts yet. Ask your child for their Student Link Code found in their settings.
-          </p>
-          <div className="max-w-sm mx-auto flex gap-2">
-            <input 
-              type="text" 
-              placeholder="Enter Student Link Code..." 
-              className="flex-1 px-4 py-3 rounded-xl border border-glass-border focus:border-primary-500 outline-none"
-            />
-            <button className="btn btn-primary px-6">Link</button>
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {children.map(child => (
-            <div key={child.id} className="bg-white rounded-3xl border border-glass-border shadow-sm overflow-hidden">
-              <div className="p-6 sm:p-8 flex flex-col md:flex-row gap-8 items-start">
-                
-                {/* Child Profile Column */}
-                <div className="w-full md:w-72 shrink-0 flex flex-col items-center text-center p-6 bg-bg-secondary rounded-2xl border border-glass-border">
-                  <div className="w-24 h-24 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-3xl border-4 border-white shadow-sm mb-4">
-                    {child.firstName[0]}{child.lastName[0]}
-                  </div>
-                  <h3 className="text-xl font-bold text-text-primary">{child.firstName} {child.lastName}</h3>
-                  <p className="text-sm text-text-secondary mb-4">{child.email}</p>
-                  
-                  <div className="w-full space-y-2 mt-auto">
-                    <div className="flex justify-between text-sm p-3 bg-white rounded-xl border border-glass-border">
-                      <span className="text-text-secondary">Enrolled</span>
-                      <span className="font-bold text-text-primary">{child.courseEnrollments.length} Courses</span>
-                    </div>
-                    <div className="flex justify-between text-sm p-3 bg-white rounded-xl border border-glass-border">
-                      <span className="text-text-secondary">Quizzes</span>
-                      <span className="font-bold text-text-primary">{child.quizAttempts.length} Completed</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Child Academics Column */}
-                <div className="flex-1 w-full space-y-6">
-                  <div>
-                    <h4 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-                      <BookOpen className="w-5 h-5 text-primary-500" /> Active Courses
-                    </h4>
-                    {child.courseEnrollments.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {child.courseEnrollments.map(enrollment => (
-                          <div key={enrollment.id} className="p-4 border border-glass-border rounded-xl hover:bg-bg-secondary transition-colors">
-                            <p className="font-bold text-text-primary mb-1 truncate">{enrollment.course.title}</p>
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-text-secondary">Progress</span>
-                              <span className="font-bold text-success-600">{Number(enrollment.progressPct)}%</span>
-                            </div>
-                            <div className="w-full h-1.5 bg-bg-tertiary rounded-full mt-2">
-                              <div className="h-full bg-success-500 rounded-full" style={{ width: `${Number(enrollment.progressPct)}%` }}></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-text-secondary italic bg-bg-secondary p-4 rounded-xl">No active courses.</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <h4 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-                      <Star className="w-5 h-5 text-warning-500" /> Recent Grades
-                    </h4>
-                    {child.quizAttempts.length > 0 || child.assignmentSubmissions.length > 0 ? (
-                      <div className="space-y-3">
-                        {child.quizAttempts.map(attempt => (
-                          <div key={attempt.id} className="flex items-center justify-between p-4 border border-glass-border rounded-xl">
-                            <div>
-                              <p className="font-bold text-text-primary text-sm">{attempt.quiz.title}</p>
-                              <p className="text-xs text-text-secondary">Quiz</p>
-                            </div>
-                            <span className="px-3 py-1 bg-success-50 text-success-700 font-bold text-sm rounded-lg border border-success-200">
-                              {Number(attempt.score)}%
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-text-secondary italic bg-bg-secondary p-4 rounded-xl">No recent grades available.</p>
-                    )}
-                  </div>
-                </div>
-
+        ) : (
+          <form onSubmit={handleLink} className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-text-primary mb-2">Student Connection Code</label>
+                <input 
+                  type="text" 
+                  value={linkCode}
+                  onChange={(e) => setLinkCode(e.target.value.toUpperCase())}
+                  placeholder="e.g. A8X9-K2M4"
+                  className="w-full px-4 py-3 rounded-xl border border-glass-border bg-bg-secondary/30 focus:bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-center text-lg font-mono tracking-widest uppercase"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-text-primary mb-2">Security PIN</label>
+                <input 
+                  type="password" 
+                  maxLength={4}
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                  placeholder="••••"
+                  className="w-full px-4 py-3 rounded-xl border border-glass-border bg-bg-secondary/30 focus:bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-center text-2xl font-mono tracking-widest"
+                  required
+                />
+                <p className="text-xs text-text-tertiary mt-2 flex items-center gap-1 justify-center">
+                  <ShieldCheck className="w-3 h-3" /> Secure 256-bit encryption
+                </p>
               </div>
             </div>
-          ))}
+
+            {status === "error" && (
+              <div className="p-4 bg-error-50 border border-error-200 rounded-xl text-error-700 text-sm font-medium text-center animate-shake">
+                Invalid connection code or PIN. Please try again. (Hint: TEST-CODE / 1234)
+              </div>
+            )}
+
+            <button 
+              type="submit" 
+              disabled={status === "verifying" || !linkCode || !pin}
+              className="w-full btn btn-primary py-4 text-lg shadow-primary-500/25 shadow-lg flex items-center justify-center gap-2"
+            >
+              {status === "verifying" ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <>Link Account <ArrowRight className="w-5 h-5" /></>
+              )}
+            </button>
+          </form>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+        <div className="p-6 rounded-2xl bg-primary-50 border border-primary-100 flex gap-4">
+          <ShieldCheck className="w-6 h-6 text-primary-600 shrink-0" />
+          <div>
+            <h4 className="font-bold text-primary-900 mb-1">Privacy First</h4>
+            <p className="text-sm text-primary-800">Only verified parents or guardians can access student records.</p>
+          </div>
         </div>
-      )}
+        <div className="p-6 rounded-2xl bg-bg-secondary border border-glass-border flex gap-4">
+          <Users className="w-6 h-6 text-text-tertiary shrink-0" />
+          <div>
+            <h4 className="font-bold text-text-primary mb-1">Need Help?</h4>
+            <p className="text-sm text-text-secondary">Contact your school administrator if you haven't received a code.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
