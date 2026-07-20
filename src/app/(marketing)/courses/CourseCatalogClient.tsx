@@ -63,7 +63,7 @@ export default function CourseCatalogClient({ initialCourses }: { initialCourses
           <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">
             Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-secondary-300">Global Curriculum</span>
           </h1>
-          <p className="text-xl text-primary-100/80 max-w-2xl mx-auto mb-10">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto mb-10">
             World-class education tailored to international standards. Find the perfect course to advance your learning journey.
           </p>
 

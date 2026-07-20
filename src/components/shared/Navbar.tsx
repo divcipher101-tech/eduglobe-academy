@@ -18,7 +18,7 @@ export default function Navbar({ session }: { session: any }) {
         
         {/* Main Navbar */}
         <div className="w-full bg-white/70 backdrop-blur-xl border-b border-glass-border/50 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between relative">
             <div className="flex items-center gap-10">
               <Link href="/" className="flex items-center gap-2 group">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-md shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all">
@@ -28,19 +28,19 @@ export default function Navbar({ session }: { session: any }) {
                   EduGlobe<span className="text-primary-600">.</span>
                 </span>
               </Link>
-              
-              <nav className="hidden md:flex items-center gap-1 bg-bg-secondary/50 p-1 rounded-xl border border-glass-border/50">
-                <Link href="/courses" className="px-4 py-2 rounded-lg text-sm font-bold text-text-secondary hover:text-primary-700 hover:bg-white hover:shadow-sm transition-all">
-                  Catalog
-                </Link>
-                <Link href="/about" className="px-4 py-2 rounded-lg text-sm font-bold text-text-secondary hover:text-primary-700 hover:bg-white hover:shadow-sm transition-all">
-                  Platform
-                </Link>
-                <Link href="/contact" className="px-4 py-2 rounded-lg text-sm font-bold text-text-secondary hover:text-primary-700 hover:bg-white hover:shadow-sm transition-all">
-                  Contact
-                </Link>
-              </nav>
             </div>
+
+            <nav className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1 bg-bg-secondary/50 p-1 rounded-xl border border-glass-border/50">
+              <Link href="/courses" className="px-4 py-2 rounded-lg text-sm font-bold text-text-secondary hover:text-primary-700 hover:bg-white hover:shadow-sm transition-all">
+                Catalog
+              </Link>
+              <Link href="/about" className="px-4 py-2 rounded-lg text-sm font-bold text-text-secondary hover:text-primary-700 hover:bg-white hover:shadow-sm transition-all">
+                Platform
+              </Link>
+              <Link href="/contact" className="px-4 py-2 rounded-lg text-sm font-bold text-text-secondary hover:text-primary-700 hover:bg-white hover:shadow-sm transition-all">
+                Contact
+              </Link>
+            </nav>
 
             <div className="flex items-center gap-3">
               {session ? (

@@ -13,10 +13,15 @@ const registerSchema = z.object({
     .regex(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, "Password must contain at least one number or special character"),
   firstName: z.string().min(2, "First name is required"),
   lastName: z.string().min(2, "Last name is required"),
+  phone: z.string().optional(),
+  dateOfBirth: z.string().optional(),
   role: z.enum(["STUDENT", "TUTOR", "PARENT"]), // ADMIN is strictly excluded here
   secretCode: z.string().optional(),
   specializations: z.array(z.string()).optional(),
 });
+
+// Common TempMail domains to block
+const BLOCKED_DOMAINS = ["tempmail.com", "10minutemail.com", "mailinator.com", "yopmail.com", "guerrillamail.com"];
 
 export async function POST(req: Request) {
   try {
@@ -30,7 +35,16 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, password, firstName, lastName, role, secretCode, specializations } = validatedData.data;
+    const { email, password, firstName, lastName, phone, dateOfBirth, role, secretCode, specializations } = validatedData.data;
+
+    // TempMail Check
+    const domain = email.split("@")[1]?.toLowerCase();
+    if (BLOCKED_DOMAINS.includes(domain)) {
+      return NextResponse.json(
+        { message: "Disposable email addresses are not allowed. Please use a real email." },
+        { status: 403 }
+      );
+    }
 
     // Secret Code Authorization Check
     if (role === "TUTOR") {
@@ -81,6 +95,14 @@ export async function POST(req: Request) {
       );
     }
 
+    // Generate 6-digit OTP
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    let parsedDob: Date | null = null;
+    if (dateOfBirth) {
+      parsedDob = new Date(dateOfBirth);
+    }
+
     // Use a Prisma transaction to ensure all related records are created together
     const newUser = await prisma.$transaction(async (tx) => {
       // 1. Create User
@@ -90,6 +112,10 @@ export async function POST(req: Request) {
           passwordHash,
           firstName,
           lastName,
+          phone,
+          dateOfBirth: parsedDob,
+          isEmailVerified: false,
+          emailVerificationToken: otpCode
         },
       });
 
@@ -116,17 +142,18 @@ export async function POST(req: Request) {
           },
         });
       }
-      // PARENT doesn't have a specific parent profile table in this schema, 
-      // they use ParentStudentLink to map to students.
 
       return user;
     });
 
-    // TODO: Send verification email here (mocking for now)
-    console.log(`[Email Mock] Sent Welcome & Verification email to ${newUser.email}`);
+    // TODO: Connect to Resend to actually email the code!
+    console.log(`\n\n=========================================`);
+    console.log(`🚨 [OTP GENERATED FOR ${newUser.email}] 🚨`);
+    console.log(`CODE: ${otpCode}`);
+    console.log(`=========================================\n\n`);
 
     return NextResponse.json(
-      { message: "User registered successfully", userId: newUser.id },
+      { message: "User registered successfully. Please verify your email.", userId: newUser.id },
       { status: 201 }
     );
   } catch (error) {
