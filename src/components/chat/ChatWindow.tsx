@@ -55,15 +55,15 @@ export function ChatWindow({
     setIsSending(true);
     try {
       // Optimistic update
-      const tempMessage: Message = {
+      const tempMessage = {
         id: "temp-" + Date.now(),
         body: inputText,
         createdAt: new Date(),
         senderId: currentUserId,
-        sender: { id: currentUserId, firstName: "Me", lastName: "" }
+        sender: { id: currentUserId, firstName: "Me", lastName: "", avatarUrl: null }
       };
       
-      mutate([...(messages || []), tempMessage], false);
+      mutate([...(messages || []), tempMessage as any], false);
       setInputText("");
 
       // Actual send

@@ -9,8 +9,17 @@ async function main() {
     process.exit(1);
   }
 
-  // Find a course to attach it to, or just make it standalone
-  const course = await prisma.course.findFirst();
+  let course = await prisma.course.findFirst();
+  if (!course) {
+    course = await prisma.course.create({
+      data: {
+        title: "Platform Basics",
+        slug: "platform-basics",
+        description: "A course about how to use the platform.",
+        price: 0,
+      }
+    });
+  }
 
   const quiz = await prisma.quiz.create({
     data: {
@@ -22,7 +31,7 @@ async function main() {
       maxAttempts: 3,
       status: "PUBLISHED",
       createdById: admin.id,
-      courseId: course?.id || undefined, // Only attach if course exists
+      courseId: course.id,
       questions: {
         create: [
           {
