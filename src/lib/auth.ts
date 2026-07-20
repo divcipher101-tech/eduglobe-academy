@@ -28,6 +28,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           if (!user || !user.passwordHash) return null;
 
+          if (!user.isActive) {
+            throw new Error("This account has been deactivated or deleted.");
+          }
+
           if (!user.isEmailVerified) {
             throw new Error("Please verify your email address before logging in.");
           }

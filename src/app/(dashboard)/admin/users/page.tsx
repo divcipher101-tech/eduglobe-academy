@@ -12,8 +12,9 @@ export default async function AdminUsersPage() {
     redirect("/dashboard");
   }
 
-  // Fetch real users from DB
+  // Fetch real active users from DB
   const dbUsers = await prisma.user.findMany({
+    where: { isActive: true },
     include: {
       userRoles: {
         include: {

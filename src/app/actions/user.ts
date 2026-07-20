@@ -17,15 +17,19 @@ export async function deleteUserAction(formData: FormData) {
   }
 
   try {
-    // Delete the user from the database. 
-    // Prisma cascading deletes should handle related records (sessions, accounts, roles, profiles, etc.)
-    await prisma.user.delete({
+    // Soft delete: We cannot hard delete easily without wiping out course enrollments, payments, etc.
+    // Setting isActive to false prevents login, and randomizing the email frees it up for re-registration.
+    await prisma.user.update({
       where: { id: userId },
+      data: { 
+        isActive: false,
+        email: `deleted_${Date.now()}_${userId}@eduglobe.local`
+      }
     });
 
     revalidatePath("/admin/users");
   } catch (error) {
     console.error("Failed to delete user:", error);
-    throw new Error("Failed to delete user. They might have related records preventing deletion.");
+    throw new Error("Failed to delete user.");
   }
 }
