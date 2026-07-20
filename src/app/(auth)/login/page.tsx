@@ -101,7 +101,7 @@ function LoginForm() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1" htmlFor="email">Email Address</label>
+          <label className="text-sm font-bold text-text-secondary ml-1" htmlFor="email">Email or Phone Number</label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Mail className={`w-5 h-5 text-text-tertiary transition-colors ${
@@ -112,7 +112,7 @@ function LoginForm() {
             </div>
             <input
               id="email"
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`w-full pl-12 pr-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${

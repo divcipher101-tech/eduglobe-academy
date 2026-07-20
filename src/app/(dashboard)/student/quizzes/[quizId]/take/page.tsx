@@ -3,13 +3,14 @@ import { redirect } from "next/navigation";
 import { getQuizForTaking } from "@/app/actions/quiz";
 import { QuizTaker } from "@/components/quiz/QuizTaker";
 
-export default async function TakeQuizPage({ params }: { params: { quizId: string } }) {
+export default async function TakeQuizPage({ params }: { params: Promise<{ quizId: string }> }) {
+  const { quizId } = await params;
   const session = await auth();
   if (!session?.user) redirect("/login");
 
   let quiz;
   try {
-    quiz = await getQuizForTaking(params.quizId);
+    quiz = await getQuizForTaking(quizId);
   } catch (error: any) {
     return (
       <div className="max-w-3xl mx-auto py-20 text-center">

@@ -11,7 +11,7 @@ import Image from "next/image";
 
 type Tab = "profile" | "security" | "notifications" | "preferences";
 
-export function SettingsClient({ user }: { user: any }) {
+export function AdminSettingsClient({ user }: { user: any }) {
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
   
@@ -65,8 +65,8 @@ export function SettingsClient({ user }: { user: any }) {
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-fade-in-up pb-12 relative">
       <div>
-        <h1 className="text-3xl font-display font-bold text-text-primary mb-2">Account Settings</h1>
-        <p className="text-text-secondary">Manage your personal information, security, and preferences.</p>
+        <h1 className="text-3xl font-display font-bold text-text-primary">System Settings</h1>
+        <p className="text-text-secondary mt-1">Manage your administrator profile, security preferences, and system options.</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -129,8 +129,8 @@ export function SettingsClient({ user }: { user: any }) {
           {activeTab === "profile" && (
             <form action={handleSaveProfile} className="space-y-8 animate-fade-in-up" autoComplete="off">
               <div>
-                <h2 className="text-xl font-bold text-text-primary mb-1">Public Profile</h2>
-                <p className="text-sm text-text-secondary">This information will be displayed to your tutors and classmates.</p>
+                <h2 className="text-xl font-bold text-text-primary mb-1">Administrator Profile</h2>
+                <p className="text-sm text-text-secondary">This information is visible to other system administrators.</p>
               </div>
 
               {profileError && (

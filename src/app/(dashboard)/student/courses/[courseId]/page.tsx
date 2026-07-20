@@ -11,11 +11,11 @@ export default async function CourseSyllabusPage({ params }: { params: Promise<{
     redirect("/login");
   }
 
-  const unwrappedParams = await params;
+  const { courseId } = await params;
 
   // Fetch course data from DB
   const course = await prisma.course.findUnique({
-    where: { id: unwrappedParams.courseId },
+    where: { id: courseId },
     include: {
       tutor: true,
       subject: true,

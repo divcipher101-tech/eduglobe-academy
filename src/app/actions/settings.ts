@@ -40,6 +40,23 @@ export async function updateProfile(formData: FormData) {
   return { success: true };
 }
 
+export async function updateAvatar(url: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { avatarUrl: url }
+  });
+
+  revalidatePath("/(dashboard)/student/settings", "page");
+  revalidatePath("/(dashboard)/tutor/settings", "page");
+  revalidatePath("/(dashboard)/parent/settings", "page");
+  revalidatePath("/(dashboard)/admin/settings", "page");
+
+  return { success: true };
+}
+
 export async function updatePassword(formData: FormData) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
