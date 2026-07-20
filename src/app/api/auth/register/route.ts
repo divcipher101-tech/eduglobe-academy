@@ -114,8 +114,8 @@ export async function POST(req: Request) {
           lastName,
           phone,
           dateOfBirth: parsedDob,
-          isEmailVerified: false,
-          emailVerificationToken: otpCode
+          isEmailVerified: true, // Auto-verify for now since Resend requires a custom domain
+          emailVerificationToken: null
         },
       });
 
@@ -146,37 +146,12 @@ export async function POST(req: Request) {
       return user;
     });
 
-    // Connect to Resend to actually email the code
-    if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import('resend');
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
-      
-      await resend.emails.send({
-        from: `EduGlobe <${fromEmail}>`,
-        to: [email],
-        subject: 'Verify your EduGlobe Account',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #2563eb;">Welcome to EduGlobe!</h1>
-            <p>Hi ${firstName},</p>
-            <p>Thank you for signing up. Please use the following 6-digit code to verify your email address:</p>
-            <div style="background-color: #f3f4f6; padding: 20px; text-align: center; border-radius: 8px; margin: 24px 0;">
-              <span style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #1e40af;">${otpCode}</span>
-            </div>
-            <p>This code will expire shortly. If you did not request this, please ignore this email.</p>
-          </div>
-        `
-      });
-    }
-
     console.log(`\n\n=========================================`);
-    console.log(`🚨 [OTP GENERATED FOR ${newUser.email}] 🚨`);
-    console.log(`CODE: ${otpCode}`);
+    console.log(`✅ [USER REGISTERED & AUTO-VERIFIED] ${newUser.email}`);
     console.log(`=========================================\n\n`);
 
     return NextResponse.json(
-      { message: "User registered successfully. Please verify your email.", userId: newUser.id },
+      { message: "User registered successfully.", userId: newUser.id },
       { status: 201 }
     );
   } catch (error) {

@@ -86,10 +86,6 @@ export default function RoleRegistrationForm({
   const [availableSubjects, setAvailableSubjects] = useState<{id: string, name: string}[]>([]);
   const [isSubjectsDropdownOpen, setIsSubjectsDropdownOpen] = useState(false);
   
-  const [isOtpStep, setIsOtpStep] = useState(false);
-  const [otpCode, setOtpCode] = useState("");
-  const [registeredEmail, setRegisteredEmail] = useState("");
-  
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -193,47 +189,10 @@ export default function RoleRegistrationForm({
       
       const data = await response.json();
 
-      if (!response.ok) {
-        setError(data.message || "An error occurred during registration.");
-        return;
-      }
-      
-      // On success, go to OTP step
-      setRegisteredEmail(formData.email);
-      setIsOtpStep(true);
-    } catch (err) {
-      setError("An error occurred during registration. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: registeredEmail,
-          code: otpCode
-        }),
-      });
-      
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Invalid OTP code.");
-        return;
-      }
-      
-      // Success!
+      // On success, go directly to login
       router.push(`/login?registered=true`);
     } catch (err) {
-      setError("An error occurred during verification.");
+      setError("An error occurred during registration. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -317,42 +276,6 @@ export default function RoleRegistrationForm({
             </div>
           )}
 
-          {isOtpStep ? (
-            <form onSubmit={handleVerifyOtp} className="space-y-5 animate-fade-in-up">
-              <div className="p-6 border border-glass-border rounded-2xl bg-bg-secondary text-center">
-                <div className="w-16 h-16 bg-success-100 text-success-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Check className="w-8 h-8" />
-                </div>
-                <h3 className="text-lg font-bold text-text-primary mb-2">Check your email</h3>
-                <p className="text-sm text-text-secondary">We've sent a 6-digit verification code to <strong>{registeredEmail}</strong>.</p>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-text-secondary ml-1">Verification Code</label>
-                <input
-                  type="text"
-                  value={otpCode}
-                  onChange={(e) => setOtpCode(e.target.value)}
-                  className={`w-full px-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium text-center text-2xl tracking-widest ${theme.inputFocus}`}
-                  placeholder="------"
-                  maxLength={6}
-                  required
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className={`w-full py-4 rounded-2xl text-lg font-bold mt-8 shadow-xl flex items-center justify-center gap-2 hover:-translate-y-1 transition-all text-white ${theme.btn}`}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <><Loader2 className="w-5 h-5 animate-spin" /> Verifying...</>
-                ) : (
-                  "Complete Registration"
-                )}
-              </button>
-            </form>
-          ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             {requiresSecret && (
               <div className="space-y-2 pb-2">
@@ -592,11 +515,10 @@ export default function RoleRegistrationForm({
               {isLoading ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> Creating account...</>
               ) : (
-                "Continue to Verification"
+                "Create Account"
               )}
             </button>
           </form>
-          )}
 
           <div className="mt-8 pt-8 border-t border-glass-border text-center text-sm font-medium text-text-tertiary">
             By creating an account, you agree to our{" "}
