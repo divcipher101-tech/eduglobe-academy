@@ -1,4 +1,4 @@
-import { CreditCard, Download, ExternalLink, Clock, CheckCircle2, AlertCircle, ShieldCheck, Receipt } from "lucide-react";
+import { Download, Clock, CheckCircle2, AlertCircle, ShieldCheck, Receipt } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";

@@ -51,7 +51,7 @@ export const authConfig = {
       if (user) {
         token.id = user.id;
         token.firstName = user.name?.split(" ")[0] || "User";
-        token.role = (user as any).roles?.[0] || "STUDENT";
+        token.role = (user as { roles?: string[] }).roles?.[0] || "STUDENT";
       }
       if (trigger === "update" && session) {
         // Handle session updates

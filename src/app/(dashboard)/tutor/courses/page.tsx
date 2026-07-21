@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { BookOpen, Users, Star, MoreVertical, PlayCircle, Plus } from "lucide-react";
+import { BookOpen, Users, Star, Plus } from "lucide-react";
 import Link from "next/link";
 
 export default async function TutorCoursesPage() {

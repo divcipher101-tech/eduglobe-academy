@@ -8,7 +8,7 @@ export default function ContactPage() {
         <div className="max-w-3xl mx-auto text-center mb-16 animate-fade-in-up">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-50 border border-primary-100 text-primary-600 font-medium text-sm mb-6">
             <MessageSquare className="w-4 h-4 mr-2" />
-            We're Here to Help
+            We&apos;re Here to Help
           </div>
           <h1 className="text-5xl md:text-6xl font-display font-bold text-text-primary mb-6 leading-tight">
             Get in Touch

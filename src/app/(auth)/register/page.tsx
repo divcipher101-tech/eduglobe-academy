@@ -25,7 +25,7 @@ export default function RegisterRoleSelection() {
             <span className="text-secondary-300">learning adventure.</span>
           </h1>
           <p className="text-primary-100/80 text-lg max-w-md">
-            Whether you're looking to learn, track your child's progress, or share your expertise, EduGlobe Academy is your ultimate platform.
+            Whether you&apos;re looking to learn, track your child&apos;s progress, or share your expertise, EduGlobe Academy is your ultimate platform.
           </p>
         </div>
 

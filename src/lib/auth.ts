@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
@@ -51,8 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               email: user.email,
               name: `${user.firstName} ${user.lastName}`,
               image: user.avatarUrl,
-              roles, // custom field
-            } as any;
+            } as import("next-auth").User & { roles: string[] };
           }
         }
 

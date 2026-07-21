@@ -8,7 +8,7 @@ export default function TermsPage() {
           
           <h2 className="text-2xl font-bold text-text-primary mt-8 mb-4">1. Acceptance of Terms</h2>
           <p className="mb-4">
-            By accessing and using EduGlobe Academy ("the Platform"), you accept and agree to be bound by the terms and provision of this agreement.
+            By accessing and using EduGlobe Academy (&quot;the Platform&quot;), you accept and agree to be bound by the terms and provision of this agreement.
           </p>
 
           <h2 className="text-2xl font-bold text-text-primary mt-8 mb-4">2. User Accounts</h2>

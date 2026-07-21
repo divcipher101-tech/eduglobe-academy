@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { DollarSign, Download, ArrowUpRight, ArrowDownRight, Building2, CreditCard, Plus } from "lucide-react";
+import { Download, ArrowUpRight, Building2, Plus } from "lucide-react";
 
 export default async function TutorFinancesPage() {
   const session = await auth();

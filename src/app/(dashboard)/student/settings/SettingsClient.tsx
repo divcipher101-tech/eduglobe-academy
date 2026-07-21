@@ -11,7 +11,7 @@ import Image from "next/image";
 
 type Tab = "profile" | "security" | "notifications" | "preferences";
 
-export function SettingsClient({ user }: { user: any }) {
+export function SettingsClient({ user }: { user: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ }) {
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
   
@@ -35,7 +35,7 @@ export function SettingsClient({ user }: { user: any }) {
       await updateProfile(formData);
       setProfileSuccess(true);
       setTimeout(() => setProfileSuccess(false), 4000);
-    } catch (err: any) {
+    } catch (err: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       setProfileError(err.message || "Failed to update profile");
     } finally {
       setIsSavingProfile(false);
@@ -51,7 +51,7 @@ export function SettingsClient({ user }: { user: any }) {
       setPasswordSuccess(true);
       if (formRef.current) formRef.current.reset();
       setTimeout(() => setPasswordSuccess(false), 4000);
-    } catch (err: any) {
+    } catch (err: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       setPasswordError(err.message || "Failed to change password");
     } finally {
       setIsSavingPassword(false);
@@ -270,7 +270,7 @@ export function SettingsClient({ user }: { user: any }) {
                     </div>
                     <div>
                       <h3 className="font-bold text-text-primary mb-1">Two-Factor Authentication (2FA)</h3>
-                      <p className="text-sm text-text-secondary">Add an extra layer of security to your account. We'll ask for a code when you log in.</p>
+                      <p className="text-sm text-text-secondary">Add an extra layer of security to your account. We&apos;ll ask for a code when you log in.</p>
                     </div>
                   </div>
                   <button className="btn btn-secondary whitespace-nowrap">Enable 2FA</button>

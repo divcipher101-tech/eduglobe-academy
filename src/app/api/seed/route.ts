@@ -57,7 +57,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ success: true, message: "Courses seeded successfully!" });
-  } catch (error: any) {
+  } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

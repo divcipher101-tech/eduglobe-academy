@@ -108,7 +108,7 @@ export default async function StudentDashboard() {
               </div>
               <h3 className="text-lg font-bold text-text-primary mb-2">No Courses Yet</h3>
               <p className="text-text-secondary mb-6 max-w-md">
-                You haven't been enrolled in any courses yet. Once you are enrolled, your syllabus and progress will appear here.
+                You haven&apos;t been enrolled in any courses yet. Once you are enrolled, your syllabus and progress will appear here.
               </p>
               <Link href="/courses" className="btn btn-primary">
                 Browse Course Catalog

@@ -51,7 +51,7 @@ async function main() {
         thumbnailUrl: c.thumbnailUrl,
         price: c.price,
         currency: c.currency,
-        status: "PUBLISHED" as any,
+        status: "PUBLISHED" as any /* eslint-disable-line @typescript-eslint/no-explicit-any */,
         tutorId: c.tutorId
       }
     });

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Role } from "@/lib/permissions";

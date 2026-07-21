@@ -4,7 +4,7 @@ import { useState } from "react";
 import { 
   Mic, MicOff, Video as VideoIcon, VideoOff, 
   MonitorUp, Hand, PhoneOff, MessageSquare, 
-  Users, Settings, Maximize, Smile, Send,
+  Users, Settings, Smile, Send,
   ChevronLeft
 } from "lucide-react";
 import Link from "next/link";

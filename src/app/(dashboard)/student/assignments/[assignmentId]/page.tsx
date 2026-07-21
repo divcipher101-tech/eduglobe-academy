@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Clock, FileText, UploadCloud, AlertCircle, File, CheckCircle2, ChevronRight } from "lucide-react";
+import { ArrowLeft, Clock, FileText, UploadCloud, CheckCircle2, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { use } from "react";
@@ -94,7 +94,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ ass
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-success-800 mb-2">Assignment Submitted Successfully!</h3>
-              <p className="text-success-600 font-medium">Your work has been sent to your tutor for grading. You'll receive a notification when it's graded.</p>
+              <p className="text-success-600 font-medium">Your work has been sent to your tutor for grading. You&apos;ll receive a notification when it&apos;s graded.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">

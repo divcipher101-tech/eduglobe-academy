@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Star, Clock, BookOpen, CheckCircle2, ChevronRight, PlayCircle, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { enrollInCourse } from "@/app/actions/enroll";
@@ -81,7 +81,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ cour
 
             {/* What you'll learn */}
             <div className="bg-white p-8 rounded-3xl border border-glass-border shadow-sm animate-fade-in-up delay-100">
-              <h2 className="text-2xl font-bold text-text-primary mb-6">What you'll learn</h2>
+              <h2 className="text-2xl font-bold text-text-primary mb-6">What you&apos;ll learn</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   "Master fundamental concepts with hands-on exercises",

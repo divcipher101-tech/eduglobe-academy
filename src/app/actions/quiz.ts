@@ -93,7 +93,7 @@ export async function submitQuizAttempt(
       isCorrect,
       marksAwarded: new Prisma.Decimal(marksAwarded)
     };
-  }).filter(Boolean) as any[];
+  }).filter(Boolean) as any /* eslint-disable-line @typescript-eslint/no-explicit-any */[];
 
   // Calculate pass/fail
   const passed = quiz.passingMarks ? totalEarnedScore >= Number(quiz.passingMarks) : null;

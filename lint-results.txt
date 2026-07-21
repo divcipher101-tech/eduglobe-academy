@@ -1,0 +1,184 @@
+
+/home/cipher/Documents/antigravity/optimistic-bohr/prisma/seed.ts
+  29:9  warning  'hqBranch' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/prisma/seedCourses.ts
+  54:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/scripts/seed-admin.ts
+  38:9  warning  'roleMapping' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(auth)/login/page.tsx
+   47:14  warning  'err' is defined but never used                                  @typescript-eslint/no-unused-vars
+  243:18  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(auth)/register/[role]/page.tsx
+  190:13  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  194:14  warning  'err' is defined but never used            @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(auth)/register/page.tsx
+  28:24  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  28:62  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/admin/settings/AdminSettingsClient.tsx
+   14:55   error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   38:19   error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   54:19   error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  273:116  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/parent/children/page.tsx
+   36:94   error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+   48:26   error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  119:102  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/parent/page.tsx
+   4:44  warning  'AlertCircle' is defined but never used                          @typescript-eslint/no-unused-vars
+   4:57  warning  'Calendar' is defined but never used                             @typescript-eslint/no-unused-vars
+   4:67  warning  'ChevronRight' is defined but never used                         @typescript-eslint/no-unused-vars
+   4:81  warning  'BookOpen' is defined but never used                             @typescript-eslint/no-unused-vars
+   4:91  warning  'Clock' is defined but never used                                @typescript-eslint/no-unused-vars
+   4:98  warning  'FileText' is defined but never used                             @typescript-eslint/no-unused-vars
+  43:72  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  90:28  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/assignments/[assignmentId]/page.tsx
+   4:51   warning  'AlertCircle' is defined but never used                          @typescript-eslint/no-unused-vars
+   4:64   warning  'File' is defined but never used                                 @typescript-eslint/no-unused-vars
+  97:113  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  97:147  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/assignments/page.tsx
+   1:10  warning  'FileText' is defined but never used                             @typescript-eslint/no-unused-vars
+  22:9   warning  'courseIds' is assigned a value but never used                   @typescript-eslint/no-unused-vars
+  97:23  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/classes/[classId]/page.tsx
+   7:20  warning  'Maximize' is defined but never used                 @typescript-eslint/no-unused-vars
+  16:9   warning  'resolvedParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/courses/[courseId]/lessons/[lessonId]/LessonViewerClient.tsx
+   6:21   warning  'PlayCircle' is defined but never used     @typescript-eslint/no-unused-vars
+   6:57   warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+   6:108  warning  'Maximize2' is defined but never used      @typescript-eslint/no-unused-vars
+  11:3    warning  'curriculum' is defined but never used     @typescript-eslint/no-unused-vars
+  14:11   error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  15:15   error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  88:42   error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/courses/[courseId]/page.tsx
+   1:20  warning  'Clock' is defined but never used                        @typescript-eslint/no-unused-vars
+  47:9   warning  'totalLessons' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  50:7   error    'nextLessonId' is never reassigned. Use 'const' instead  prefer-const
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/page.tsx
+  111:26  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  123:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/payments/page.tsx
+  1:10  warning  'CreditCard' is defined but never used    @typescript-eslint/no-unused-vars
+  1:32  warning  'ExternalLink' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/quizzes/[quizId]/take/page.tsx
+  14:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/quizzes/page.tsx
+  1:74  warning  'FileQuestion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/settings/SettingsClient.tsx
+   14:50   error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   38:19   error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   54:19   error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  273:116  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/tutor/courses/page.tsx
+   3:33  warning  'MoreVertical' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   3:47  warning  'PlayCircle' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   4:8   warning  'Link' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  38:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/tutor/finances/page.tsx
+  3:10  warning  'DollarSign' is defined but never used      @typescript-eslint/no-unused-vars
+  3:46  warning  'ArrowDownRight' is defined but never used  @typescript-eslint/no-unused-vars
+  3:73  warning  'CreditCard' is defined but never used      @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/tutor/page.tsx
+    3:100  warning  'MoreVertical' is defined but never used                         @typescript-eslint/no-unused-vars
+  125:70   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/careers/page.tsx
+   1:8    warning  'Link' is defined but never used                                 @typescript-eslint/no-unused-vars
+   2:10   warning  'ArrowRight' is defined but never used                           @typescript-eslint/no-unused-vars
+  19:78   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  42:67   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  42:107  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/contact/page.tsx
+  11:15  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/cookies/page.tsx
+  26:19  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/courses/CourseCatalogClient.tsx
+    5:18  warning  'Filter' is defined but never used                               @typescript-eslint/no-unused-vars
+    5:39  warning  'BookOpen' is defined but never used                             @typescript-eslint/no-unused-vars
+    5:66  warning  'AlertCircle' is defined but never used                          @typescript-eslint/no-unused-vars
+    7:83  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  216:26  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/courses/[courseId]/page.tsx
+   2:20  warning  'redirect' is defined but never used                             @typescript-eslint/no-unused-vars
+  84:81  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/page.tsx
+   2:60  warning  'CheckCircle2' is defined but never used                         @typescript-eslint/no-unused-vars
+  78:17  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/secondary/page.tsx
+  43:106  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/terms/page.tsx
+  11:54  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  11:67  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/actions/quiz.ts
+  96:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/api/auth/register/route.ts
+  99:11  warning  'otpCode' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/api/seed/route.ts
+  60:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/api/uploadthing/core.ts
+  12:26  warning  'req' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/chat/ChatSidebar.tsx
+  73:94  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  86:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/chat/ChatWindow.tsx
+    9:6   warning  'Message' is defined but never used                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   66:51  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   95:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  132:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/quiz/QuizTaker.tsx
+  56:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/shared/DashboardLayout.tsx
+  67:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/shared/Navbar.tsx
+  8:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/lib/auth.config.ts
+  54:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/lib/auth.ts
+  55:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 96 problems (47 errors, 49 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+
+tially fixable with the `--fix` option.
+

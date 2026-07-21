@@ -33,7 +33,7 @@ export default function LinkChildPage() {
         </div>
         <h1 className="text-3xl font-display font-bold text-text-primary">Link Student Account</h1>
         <p className="text-text-secondary max-w-lg mx-auto">
-          Enter the unique 8-character connection code and 4-digit PIN provided by your child's school or tutor to link their account to your dashboard.
+          Enter the unique 8-character connection code and 4-digit PIN provided by your child&apos;s school or tutor to link their account to your dashboard.
         </p>
       </div>
 
@@ -45,7 +45,7 @@ export default function LinkChildPage() {
             </div>
             <h2 className="text-2xl font-bold text-text-primary mb-2">Account Linked Successfully!</h2>
             <p className="text-text-secondary mb-8">
-              Emma Watson's student account is now linked to your parent portal.
+              Emma Watson&apos;s student account is now linked to your parent portal.
             </p>
             <Link href="/parent" className="btn btn-primary w-full sm:w-auto">
               Return to Dashboard
@@ -116,7 +116,7 @@ export default function LinkChildPage() {
           <Users className="w-6 h-6 text-text-tertiary shrink-0" />
           <div>
             <h4 className="font-bold text-text-primary mb-1">Need Help?</h4>
-            <p className="text-sm text-text-secondary">Contact your school administrator if you haven't received a code.</p>
+            <p className="text-sm text-text-secondary">Contact your school administrator if you haven&apos;t received a code.</p>
           </div>
         </div>
       </div>

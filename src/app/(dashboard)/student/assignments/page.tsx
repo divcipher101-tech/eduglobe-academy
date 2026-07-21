@@ -1,4 +1,4 @@
-import { FileText, Clock, CheckCircle2, AlertCircle, FileUp, ArrowRight, ClipboardList } from "lucide-react";
+import { Clock, CheckCircle2, AlertCircle, FileUp, ArrowRight, ClipboardList } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";
@@ -94,7 +94,7 @@ export default async function AssignmentsDashboard() {
              <ClipboardList className="w-16 h-16 text-text-tertiary mb-4" />
              <h3 className="text-xl font-bold text-text-primary mb-2">No Assignments Found</h3>
              <p className="text-text-secondary max-w-md">
-               You don't have any assignments yet. When your tutors assign homework or projects, they will appear here.
+               You don&apos;t have any assignments yet. When your tutors assign homework or projects, they will appear here.
              </p>
           </div>
         ) : (

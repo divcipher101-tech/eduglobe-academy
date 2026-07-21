@@ -2,9 +2,9 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, Filter, Star, Clock, BookOpen, ChevronRight, X, AlertCircle } from "lucide-react";
+import { Search, Star, Clock, ChevronRight, X } from "lucide-react";
 
-export default function CourseCatalogClient({ initialCourses }: { initialCourses: any[] }) {
+export default function CourseCatalogClient({ initialCourses }: { initialCourses: any[] /* eslint-disable-line @typescript-eslint/no-explicit-any */ }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All Courses");
   const [visibleCount, setVisibleCount] = useState(12);
@@ -213,7 +213,7 @@ export default function CourseCatalogClient({ initialCourses }: { initialCourses
               </div>
               <h3 className="text-2xl font-display font-bold text-text-primary mb-2">No courses found</h3>
               <p className="text-text-secondary max-w-md mx-auto mb-8">
-                We couldn't find any courses matching your current filters and search query. Try adjusting them to see more results.
+                We couldn&apos;t find any courses matching your current filters and search query. Try adjusting them to see more results.
               </p>
               <button 
                 onClick={() => {

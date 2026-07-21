@@ -1,4 +1,4 @@
-import { HelpCircle, Clock, Trophy, PlayCircle, BarChart2, CheckCircle2, FileQuestion } from "lucide-react";
+import { HelpCircle, Clock, Trophy, PlayCircle, BarChart2, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";

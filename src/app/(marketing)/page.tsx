@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Video, BrainCircuit, Globe, CheckCircle2, Users, Star, GraduationCap, Laptop, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Video, BrainCircuit, Globe, Users, Star, GraduationCap, Laptop, Sparkles } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -75,7 +75,7 @@ export default function LandingPage() {
               An ecosystem built for excellence
             </h2>
             <p className="text-xl text-text-secondary">
-              We've engineered every feature to remove friction from the learning process and deliver measurable results.
+              We&apos;ve engineered every feature to remove friction from the learning process and deliver measurable results.
             </p>
           </div>
 

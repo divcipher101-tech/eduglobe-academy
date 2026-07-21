@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Briefcase, Users, Heart, Sparkles } from "lucide-react";
+import { Briefcase, Users, Heart, Sparkles } from "lucide-react";
 
 export default function CareersPage() {
   return (
@@ -16,7 +16,7 @@ export default function CareersPage() {
             </span>
           </h1>
           <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-            Join our diverse team of innovators, educators, and engineers. We're on a mission to make world-class education accessible to everyone.
+            Join our diverse team of innovators, educators, and engineers. We&apos;re on a mission to make world-class education accessible to everyone.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export default function CareersPage() {
         <div className="bg-white border border-glass-border rounded-3xl p-8 mb-16 shadow-sm text-center">
           <Users className="w-12 h-12 text-primary-500 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-text-primary mb-4">Open Positions</h3>
-          <p className="text-text-secondary mb-8">We currently don't have any open non-tutor roles, but we're always looking for great talent. Send your CV to careers@eduglobe.academy.</p>
+          <p className="text-text-secondary mb-8">We currently don&apos;t have any open non-tutor roles, but we&apos;re always looking for great talent. Send your CV to careers@eduglobe.academy.</p>
         </div>
 
       </div>

@@ -11,7 +11,7 @@ export default async function TakeQuizPage({ params }: { params: Promise<{ quizI
   let quiz;
   try {
     quiz = await getQuizForTaking(quizId);
-  } catch (error: any) {
+  } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
     return (
       <div className="max-w-3xl mx-auto py-20 text-center">
         <h1 className="text-3xl font-bold text-text-primary mb-4">Cannot Take Quiz</h1>

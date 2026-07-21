@@ -1,0 +1,83 @@
+
+> eduglobe-academy@0.1.0 lint
+> eslint
+
+
+/home/cipher/Documents/antigravity/optimistic-bohr/prisma/seed.ts
+  29:9  warning  'hqBranch' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/scripts/seed-admin.ts
+  38:9  warning  'roleMapping' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(auth)/login/page.tsx
+   47:14  warning  'err' is defined but never used                                  @typescript-eslint/no-unused-vars
+  243:18  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(auth)/register/[role]/page.tsx
+  190:13  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  194:14  warning  'err' is defined but never used            @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/parent/children/page.tsx
+  48:26  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/assignments/[assignmentId]/page.tsx
+  97:113  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/assignments/page.tsx
+  22:9  warning  'courseIds' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/classes/[classId]/page.tsx
+  16:9  warning  'resolvedParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/courses/[courseId]/lessons/[lessonId]/LessonViewerClient.tsx
+  13:11  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  87:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/courses/[courseId]/page.tsx
+  47:9  warning  'totalLessons' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  50:7  error    'nextLessonId' is never reassigned. Use 'const' instead  prefer-const
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/student/page.tsx
+  123:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(dashboard)/tutor/courses/page.tsx
+   4:8   warning  'Link' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  38:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/careers/page.tsx
+  1:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/cookies/page.tsx
+  26:19  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/courses/CourseCatalogClient.tsx
+  216:26  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/(marketing)/secondary/page.tsx
+  43:106  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/app/api/auth/register/route.ts
+  99:11  warning  'otpCode' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/chat/ChatSidebar.tsx
+  76:98  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/chat/ChatWindow.tsx
+  69:55  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/quiz/QuizTaker.tsx
+   1:1   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-unused-vars')
+   3:1   warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+  59:23  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/components/shared/DashboardLayout.tsx
+  1:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-unused-vars')
+  2:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+/home/cipher/Documents/antigravity/optimistic-bohr/src/lib/auth.ts
+  2:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+  3:1  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+✖ 31 problems (9 errors, 22 warnings)
+  1 error and 9 warnings potentially fixable with the `--fix` option.
+

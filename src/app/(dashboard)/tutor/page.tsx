@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Users, Calendar, Video, Star, DollarSign, Clock, ArrowRight, MessageSquare, CheckCircle2, MoreVertical, TrendingUp } from "lucide-react";
+import { Users, Calendar, Video, Star, DollarSign, Clock, ArrowRight, MessageSquare, CheckCircle2, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 export default async function TutorDashboard() {
@@ -122,7 +122,7 @@ export default async function TutorDashboard() {
         {/* Today's Schedule */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-text-primary">Today's Schedule</h2>
+            <h2 className="text-xl font-bold text-text-primary">Today&apos;s Schedule</h2>
             <Link href="/tutor/classes" className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1">
               View All <ArrowRight className="w-4 h-4" />
             </Link>

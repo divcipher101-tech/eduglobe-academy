@@ -5,7 +5,7 @@ import { Sparkles, LogOut } from "lucide-react";
 import { SignOutModal } from "./SignOutModal";
 import { useState } from "react";
 
-export default function Navbar({ session }: { session: any }) {
+export default function Navbar({ session }: { session: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ }) {
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
 
   return (

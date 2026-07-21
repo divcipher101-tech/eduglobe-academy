@@ -1,4 +1,4 @@
-import { BookOpen, Clock, PlayCircle, Lock, Award, FileText, CheckCircle2 } from "lucide-react";
+import { BookOpen, PlayCircle, Lock, Award, FileText, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -47,7 +47,7 @@ export default async function CourseSyllabusPage({ params }: { params: Promise<{
   const totalLessons = course.modules.reduce((acc, mod) => acc + mod.lessons.length, 0);
 
   // Determine the first lesson ID for the "Continue Learning" button
-  let nextLessonId = course.modules[0]?.lessons[0]?.id || "";
+  const nextLessonId = course.modules[0]?.lessons[0]?.id || "";
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in-up pb-20">

@@ -40,7 +40,7 @@ export default function SecondaryPage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/20 rounded-full blur-3xl" />
           <div className="relative z-10">
             <h2 className="text-3xl font-display font-bold text-white mb-4">Take the next step</h2>
-            <p className="text-accent-100 mb-8 max-w-xl mx-auto">Secure your future with EduGlobe Academy's elite secondary programs.</p>
+            <p className="text-accent-100 mb-8 max-w-xl mx-auto">Secure your future with EduGlobe Academy&apos;s elite secondary programs.</p>
             <Link href="/register/student" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-accent-900 rounded-xl font-bold hover:bg-accent-50 transition-colors shadow-lg">
               Start Preparations <ArrowRight className="w-5 h-5" />
             </Link>

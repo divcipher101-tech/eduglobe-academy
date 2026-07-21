@@ -23,7 +23,7 @@ export default function CookiesPage() {
 
           <h2 className="text-2xl font-bold text-text-primary mt-8 mb-4">4. Your Choices Regarding Cookies</h2>
           <p className="mb-4">
-            If you'd like to delete cookies or instruct your web browser to delete or refuse cookies, please visit the help pages of your web browser. Please note, however, that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer, and some of our pages might not display properly.
+            If you&apos;d like to delete cookies or instruct your web browser to delete or refuse cookies, please visit the help pages of your web browser. Please note, however, that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer, and some of our pages might not display properly.
           </p>
         </div>
       </div>

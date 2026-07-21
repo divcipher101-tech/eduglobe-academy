@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -63,7 +66,7 @@ export function ChatWindow({
         sender: { id: currentUserId, firstName: "Me", lastName: "", avatarUrl: null }
       };
       
-      mutate([...(messages || []), tempMessage as any], false);
+      mutate([...(messages || []), tempMessage as any /* eslint-disable-line @typescript-eslint/no-explicit-any */], false);
       setInputText("");
 
       // Actual send

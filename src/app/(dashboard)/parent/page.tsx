@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { Users, GraduationCap, TrendingUp, AlertCircle, Calendar, ChevronRight, BookOpen, Clock, FileText, CheckCircle2 } from "lucide-react";
+import { Users, GraduationCap, TrendingUp, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 export default async function ParentDashboard() {
@@ -40,7 +40,7 @@ export default async function ParentDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-display font-bold text-text-primary">Parent Portal</h1>
-          <p className="text-text-secondary mt-1">Monitor your children's academic progress</p>
+          <p className="text-text-secondary mt-1">Monitor your children&apos;s academic progress</p>
         </div>
         <Link href="/parent/children" className="btn btn-primary shadow-sm shadow-primary-500/20">
           <Users className="w-4 h-4 mr-2" /> Link New Child
@@ -87,7 +87,7 @@ export default async function ParentDashboard() {
           </div>
           <h3 className="text-xl font-bold text-text-primary mb-2">No Children Linked Yet</h3>
           <p className="text-text-secondary max-w-md mx-auto mb-6">
-            Link your child's account to start monitoring their grades, attendance, and course progress.
+            Link your child&apos;s account to start monitoring their grades, attendance, and course progress.
           </p>
           <Link href="/parent/children" className="btn btn-primary mx-auto">
             Link a Child Account
