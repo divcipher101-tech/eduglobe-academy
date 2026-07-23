@@ -4,9 +4,9 @@ import { useState, Suspense, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Mail, Lock, AlertCircle, CheckCircle2, Loader2, Eye, EyeOff, BookOpen, GraduationCap, ArrowRight, User, Users } from "lucide-react";
+import { Mail, Lock, AlertCircle, CheckCircle2, Loader2, Eye, EyeOff, BookOpen, GraduationCap, ArrowRight, User, Users, ShieldCheck } from "lucide-react";
 
-type RoleType = "STUDENT" | "PARENT" | "TUTOR";
+type RoleType = "STUDENT" | "PARENT" | "TUTOR" | "MANAGER";
 
 function LoginForm() {
   const router = useRouter();
@@ -52,10 +52,10 @@ function LoginForm() {
 
   return (
     <>
-      <div className="flex bg-bg-secondary p-1 rounded-2xl mb-8 border border-glass-border">
+      <div className="flex flex-wrap bg-bg-secondary p-1 rounded-2xl mb-8 border border-glass-border gap-1">
         <button
           onClick={() => setActiveRole("STUDENT")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
+          className={`flex-1 min-w-[80px] flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
             activeRole === "STUDENT" 
               ? "bg-white text-primary-600 shadow-sm border border-glass-border/50 scale-[1.02]" 
               : "text-text-secondary hover:text-text-primary hover:bg-white/50"
@@ -65,7 +65,7 @@ function LoginForm() {
         </button>
         <button
           onClick={() => setActiveRole("PARENT")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
+          className={`flex-1 min-w-[80px] flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
             activeRole === "PARENT" 
               ? "bg-white text-secondary-600 shadow-sm border border-glass-border/50 scale-[1.02]" 
               : "text-text-secondary hover:text-text-primary hover:bg-white/50"
@@ -75,13 +75,23 @@ function LoginForm() {
         </button>
         <button
           onClick={() => setActiveRole("TUTOR")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
+          className={`flex-1 min-w-[80px] flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
             activeRole === "TUTOR" 
               ? "bg-white text-accent-600 shadow-sm border border-glass-border/50 scale-[1.02]" 
               : "text-text-secondary hover:text-text-primary hover:bg-white/50"
           }`}
         >
           <GraduationCap className="w-4 h-4" /> Tutor
+        </button>
+        <button
+          onClick={() => setActiveRole("MANAGER")}
+          className={`flex-1 min-w-[80px] flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
+            activeRole === "MANAGER" 
+              ? "bg-white text-slate-700 shadow-sm border border-glass-border/50 scale-[1.02]" 
+              : "text-text-secondary hover:text-text-primary hover:bg-white/50"
+          }`}
+        >
+          <ShieldCheck className="w-4 h-4" /> Manager
         </button>
       </div>
 
@@ -107,6 +117,7 @@ function LoginForm() {
               <Mail className={`w-5 h-5 text-text-tertiary transition-colors ${
                 activeRole === "STUDENT" ? "group-focus-within:text-primary-500" :
                 activeRole === "PARENT" ? "group-focus-within:text-secondary-500" :
+                activeRole === "MANAGER" ? "group-focus-within:text-slate-600" :
                 "group-focus-within:text-accent-500"
               }`} />
             </div>
@@ -118,6 +129,7 @@ function LoginForm() {
               className={`w-full pl-12 pr-4 py-4 bg-bg-secondary/50 border border-glass-border rounded-2xl focus:outline-none focus:ring-4 transition-all font-medium ${
                 activeRole === "STUDENT" ? "focus:ring-primary-500/10 focus:border-primary-500" :
                 activeRole === "PARENT" ? "focus:ring-secondary-500/10 focus:border-secondary-500" :
+                activeRole === "MANAGER" ? "focus:ring-slate-500/10 focus:border-slate-500" :
                 "focus:ring-accent-500/10 focus:border-accent-500"
               }`}
               placeholder="you@example.com"
@@ -132,6 +144,7 @@ function LoginForm() {
             <Link href="/forgot-password" className={`text-xs font-bold transition-colors ${
               activeRole === "STUDENT" ? "text-primary-600 hover:text-primary-700" :
               activeRole === "PARENT" ? "text-secondary-600 hover:text-secondary-700" :
+              activeRole === "MANAGER" ? "text-slate-600 hover:text-slate-700" :
               "text-accent-600 hover:text-accent-700"
             }`}>
               Forgot password?

@@ -20,6 +20,7 @@ export default async function DashboardRedirect() {
     case "ADMIN":
       redirect("/admin");
     case "BRANCH_MANAGER":
+    case "MANAGER":
       redirect("/manager");
     default:
       // If role is undefined or not handled, maybe fallback to a generic error or profile page

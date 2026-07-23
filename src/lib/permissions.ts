@@ -4,7 +4,7 @@
  * for checking access in middleware, Server Actions, and components.
  */
 
-export type Role = "STUDENT" | "TUTOR" | "PARENT" | "ADMIN" | "BRANCH_MANAGER";
+export type Role = "STUDENT" | "TUTOR" | "PARENT" | "ADMIN" | "BRANCH_MANAGER" | "MANAGER";
 
 export const PERMISSIONS = {
   // User Management
@@ -156,7 +156,36 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "admin.dashboard",
     "admin.tutors.approve",
   ],
+
+  MANAGER: [
+    "users.view",
+    "users.manage",
+    "courses.view",
+    "courses.create",
+    "courses.edit",
+    "courses.publish",
+    "classes.view",
+    "classes.create",
+    "classes.edit",
+    "classes.delete",
+    "assignments.view",
+    "assignments.create",
+    "assignments.grade",
+    "quizzes.view",
+    "quizzes.create",
+    "quizzes.grade",
+    "payments.view",
+    "payments.manage",
+    "messages.send",
+    "messages.view",
+    "notifications.manage",
+    "reports.view",
+    "reports.generate",
+    "analytics.view",
+    "admin.dashboard",
+  ],
 };
+
 
 /**
  * Check if a role has a specific permission.
@@ -208,9 +237,8 @@ export const ROUTE_ACCESS: Record<string, Role[]> = {
   "/tutor": ["TUTOR"],
   "/parent": ["PARENT"],
   "/admin": ["ADMIN"],
-  "/manager": ["BRANCH_MANAGER"],
+  "/manager": ["BRANCH_MANAGER", "MANAGER"],
 };
-
 /**
  * Get the default dashboard path for a role.
  */
@@ -221,8 +249,9 @@ export function getDashboardPath(role: Role): string {
     PARENT: "/parent",
     ADMIN: "/admin",
     BRANCH_MANAGER: "/manager",
+    MANAGER: "/manager",
   };
-  return paths[role] || "/student";
+  return paths[role] || "/dashboard";
 }
 
 /**
