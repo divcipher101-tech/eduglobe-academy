@@ -54,6 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               email: user.email,
               name: `${user.firstName} ${user.lastName}`,
               image: user.avatarUrl,
+              roles: roles,
             } as import("next-auth").User & { roles: string[] };
           }
         }

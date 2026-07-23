@@ -111,7 +111,9 @@ function LoginForm() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1" htmlFor="email">Email or Phone Number</label>
+          <label className="text-sm font-bold text-text-secondary ml-1" htmlFor="email">
+            {activeRole === "MANAGER" ? "Username" : "Email or Phone Number"}
+          </label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Mail className={`w-5 h-5 text-text-tertiary transition-colors ${
@@ -132,7 +134,7 @@ function LoginForm() {
                 activeRole === "MANAGER" ? "focus:ring-slate-500/10 focus:border-slate-500" :
                 "focus:ring-accent-500/10 focus:border-accent-500"
               }`}
-              placeholder="you@example.com"
+              placeholder={activeRole === "MANAGER" ? "Username" : "you@example.com"}
               required
             />
           </div>
