@@ -142,9 +142,12 @@ export default async function QuizzesDashboard() {
               <p className="text-sm font-medium text-text-secondary mb-6">
                 {attempt.quiz.course?.title || "General Assessment"}
               </p>
-              <button className="w-full py-2.5 px-4 bg-bg-secondary hover:bg-bg-tertiary text-text-secondary rounded-xl font-bold text-center transition-all flex items-center justify-center gap-2 mt-auto">
+              <Link 
+                href={`/student/quizzes/${attempt.quizId}/review`}
+                className="w-full py-2.5 px-4 bg-bg-secondary hover:bg-bg-tertiary text-text-secondary rounded-xl font-bold text-center transition-all flex items-center justify-center gap-2 mt-auto"
+              >
                 <BarChart2 className="w-5 h-5" /> Review Results
-              </button>
+              </Link>
             </div>
           ))}
         </div>

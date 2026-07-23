@@ -21,8 +21,8 @@ export default function Navbar({ session }: { session: any /* eslint-disable-lin
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between relative">
             <div className="flex items-center gap-10">
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-md shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all">
-                  <Sparkles className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-lg overflow-hidden shadow-md shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all">
+                  <img src="/logo.jpg" alt="EduGlobe Logo" className="w-full h-full object-cover" />
                 </div>
                 <span className="font-display font-bold text-2xl tracking-tight text-text-primary">
                   EduGlobe<span className="text-primary-600">.</span>

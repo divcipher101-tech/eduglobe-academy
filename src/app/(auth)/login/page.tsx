@@ -42,7 +42,7 @@ function LoginForm() {
         setError("Invalid email or password");
         setIsLoading(false);
       } else {
-        window.location.href = "/dashboard";
+        window.location.replace("/dashboard");
       }
     } catch (err) {
       setError("An unexpected error occurred");

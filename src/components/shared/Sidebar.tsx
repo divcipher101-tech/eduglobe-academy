@@ -94,8 +94,8 @@ export default function Sidebar({ role }: { role: Role }) {
         {/* Brand Header */}
         <div className="h-[80px] flex items-center px-8 border-b border-glass-border/50 shrink-0 bg-white/50">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-md shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all">
-              <Sparkles className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden shadow-md shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all">
+              <img src="/logo.jpg" alt="EduGlobe" className="w-full h-full object-cover" />
             </div>
             <span className="font-display font-bold text-xl tracking-tight text-text-primary">
               EduGlobe<span className="text-primary-600">.</span>
